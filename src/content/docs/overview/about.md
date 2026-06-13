@@ -35,5 +35,6 @@ sidebar:
 
 1. まず [システム全体像](/ai-tech-notes/overview/architecture/) で俯瞰する
 2. [ユースケース](/ai-tech-notes/use-cases/) で自分のケースに近いものを見つける
-3. 各論（[RAG](/ai-tech-notes/rag/) / [MCP](/ai-tech-notes/mcp/) / [データ](/ai-tech-notes/data-modeling/)）を深掘り
-4. [アンチパターン](/ai-tech-notes/anti-patterns/) と [コスト・ROI](/ai-tech-notes/cost-roi/) で実装判断を固める
+3. 不安があれば [LLM の基礎](/ai-tech-notes/llm-basics/)（トークン・コンテキストウィンドウ・モデル選定）で土台を固める
+4. 各論（[RAG](/ai-tech-notes/rag/) / [MCP](/ai-tech-notes/mcp/) / [データ](/ai-tech-notes/data-modeling/)）を深掘り
+5. [アンチパターン](/ai-tech-notes/anti-patterns/) と [コスト・ROI](/ai-tech-notes/cost-roi/) で実装判断を固める

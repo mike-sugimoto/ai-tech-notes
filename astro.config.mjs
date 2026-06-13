@@ -43,6 +43,10 @@ export default defineConfig({
           items: [{ autogenerate: { directory: 'use-cases' } }],
         },
         {
+          label: 'LLM の基礎',
+          items: [{ autogenerate: { directory: 'llm-basics' } }],
+        },
+        {
           label: 'RAG 設計',
           items: [{ autogenerate: { directory: 'rag' } }],
         },
