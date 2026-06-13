@@ -1,0 +1,58 @@
+---
+title: AI Tech Notes
+description: 高精度なAIナレッジ・システム（RAG / MCP / データ設計 / コスト）を構築するための包括的な設計ノート。
+template: splash
+hero:
+  tagline: AIによるナレッジ回答・ドラフト作成・レビューシステムを、高精度かつ低コストで構築するための設計ノート。
+  actions:
+    - text: 全体像から読む
+      link: /ai-tech-notes/overview/about/
+      icon: right-arrow
+      variant: primary
+    - text: GitHub で見る
+      link: https://github.com/mike-sugimoto/ai-tech-notes
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## このサイトについて
+
+**AI Tech Notes** は、社内ナレッジを対象とした **AI 回答 / ドラフト生成 / レビュー支援** システムを
+設計・構築するときに「知っておくべきこと」を、漏れなく一箇所にまとめた技術ノートです。
+RAG・MCP・データの蓄積場所（Microsoft 系中心）・データ形式・アンチパターン・コスト/ROI までを
+横断的にカバーします。
+
+**想定読者:** AI システムアーキテクト / IT 部門 / 開発者
+
+<CardGrid stagger>
+  <Card title="ユースケース" icon="rocket">
+    回答・ドラフト・レビューの代表的ユースケースと、推奨アーキテクチャ。
+    [読む →](/ai-tech-notes/use-cases/)
+  </Card>
+  <Card title="RAG 設計" icon="puzzle">
+    チャンク戦略・検索・リランキング・評価まで、高精度回答の中核。
+    [読む →](/ai-tech-notes/rag/)
+  </Card>
+  <Card title="MCP 活用" icon="seti:config">
+    MCP の役割、サーバ構成、トークン消費問題への対策、RAG との使い分け。
+    [読む →](/ai-tech-notes/mcp/)
+  </Card>
+  <Card title="データソース（MS中心）" icon="seti:folder">
+    File Server / Confluence / JIRA / GitHub / SharePoint への接続戦略。
+    [読む →](/ai-tech-notes/data-sources/)
+  </Card>
+  <Card title="データ設計・形式" icon="document">
+    Markdown 推奨・メタデータ付与・YAML タグ・バージョン管理と重複対策。
+    [読む →](/ai-tech-notes/data-modeling/)
+  </Card>
+  <Card title="アンチパターン" icon="warning">
+    データ複製による重複バージョン問題、MCP トークン浪費などの落とし穴。
+    [読む →](/ai-tech-notes/anti-patterns/)
+  </Card>
+  <Card title="コスト・ROI" icon="approve-check">
+    コスト構造の理解、ROI 視点でのシステム選定と最適化。
+    [読む →](/ai-tech-notes/cost-roi/)
+  </Card>
+</CardGrid>
