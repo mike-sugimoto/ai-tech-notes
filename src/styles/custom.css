@@ -1,0 +1,61 @@
+/* ============================================================
+   AI Tech Notes — テックリード風テーマ
+   アクセント: ティール × グリーン（ターミナル/GitHub 風）
+   ============================================================ */
+
+:root {
+  /* ダークモード（既定） */
+  --sl-color-accent-low: #0c2f2a;
+  --sl-color-accent: #16a394;
+  --sl-color-accent-high: #a5ece0;
+
+  /* 等幅フォント（コード・見出しのアクセントに使用） */
+  --tech-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Cascadia Code",
+    "Menlo", "Consolas", monospace;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #c3f0e7;
+  --sl-color-accent: #117c6f;
+  --sl-color-accent-high: #0a342e;
+}
+
+/* サイトタイトルを等幅にしてテックリード感を出す */
+.site-title {
+  font-family: var(--tech-mono);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* タイトル先頭にプロンプト記号を添える */
+.site-title::before {
+  content: "~/ ";
+  color: var(--sl-color-accent);
+  opacity: 0.8;
+}
+
+/* ページ見出しに軽くテック感を */
+.content-panel h1,
+.content-panel h2 {
+  letter-spacing: -0.01em;
+}
+
+/* インラインコードを少し際立たせる */
+.sl-markdown-content code:not(:where(pre code)) {
+  font-family: var(--tech-mono);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+}
+
+/* Mermaid 図をカード調に収める */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin-block: 1.25rem;
+  padding: 1rem;
+  background: var(--sl-color-gray-7, var(--sl-color-bg-nav));
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
