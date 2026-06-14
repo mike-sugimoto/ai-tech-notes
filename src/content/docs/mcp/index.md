@@ -40,6 +40,7 @@ flowchart LR
 MCP は便利な反面、**コンテキストとトークンを消費しやすい**という落とし穴があります
 → [トークン消費問題と対策](/ai-tech-notes/mcp/token-cost/)。
 
-:::note[今後追記]
-代表的なMCPサーバ（社内システム連携）の実例を追加予定。
+:::tip[具体的な構成例]
+Microsoft 365 環境で Claude を使い、RAG と MCP を接続する具体的な事例は
+[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/mcp/m365-copilot-claude-reference/) を参照してください。
 :::
