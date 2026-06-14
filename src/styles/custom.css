@@ -1,61 +1,97 @@
 /* ============================================================
-   AI Tech Notes — テックリード風テーマ
-   アクセント: ティール × グリーン（ターミナル/GitHub 風）
+   AI Tech Notes — Anthropic / Claude Code docs 風テーマ
+   温かいアイボリー背景 × クレイ（テラコッタ）アクセント、
+   クリーンなサンセリフ（Inter + Noto Sans JP）。
+   ※ Anthropic 正規フォント(Styrene/Tiempos)は配布不可のため近似フォントを使用。
    ============================================================ */
 
 :root {
-  /* ダークモード（既定） */
-  --sl-color-accent-low: #0c2f2a;
-  --sl-color-accent: #16a394;
-  --sl-color-accent-high: #a5ece0;
+  /* フォント */
+  --sl-font: 'Inter', 'Noto Sans JP', system-ui, -apple-system, 'Segoe UI',
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic', Meiryo, sans-serif;
+  --sl-font-mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono',
+    'Cascadia Code', 'Menlo', 'Consolas', monospace;
 
-  /* 等幅フォント（コード・見出しのアクセントに使用） */
-  --tech-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Cascadia Code",
-    "Menlo", "Consolas", monospace;
+  /* ===== ダークモード（既定）: 温かい墨色 × コーラル ===== */
+  --sl-color-accent-low: #3a2018;
+  --sl-color-accent: #d97757; /* Anthropic コーラル/クレイ */
+  --sl-color-accent-high: #f1c9b9;
+
+  --sl-color-white: #f7f4ee; /* 最も明るいテキスト（見出し） */
+  --sl-color-gray-1: #e8e4db;
+  --sl-color-gray-2: #c7c1b5;
+  --sl-color-gray-3: #9d978b;
+  --sl-color-gray-4: #6c675e;
+  --sl-color-gray-5: #423e37;
+  --sl-color-gray-6: #2a2722;
+  --sl-color-black: #1b1a17; /* 背景の基準 */
+
+  --sl-color-bg: #1b1a17;
+  --sl-color-bg-nav: #211f1b;
+  --sl-color-bg-sidebar: #1f1d19;
+  --sl-color-hairline-shade: #322e28;
 }
 
 :root[data-theme='light'] {
-  --sl-color-accent-low: #c3f0e7;
-  --sl-color-accent: #117c6f;
-  --sl-color-accent-high: #0a342e;
+  /* ===== ライトモード: アイボリー × 深いクレイ ===== */
+  --sl-color-accent-low: #f3ddd2;
+  --sl-color-accent: #b8552f; /* 文字/リンク用にコントラストを確保したクレイ */
+  --sl-color-accent-high: #5a2615;
+
+  --sl-color-white: #1b1a17; /* ライトでは「白」が最も濃いテキスト色になる */
+  --sl-color-gray-1: #2a2722;
+  --sl-color-gray-2: #423e37;
+  --sl-color-gray-3: #6c675e;
+  --sl-color-gray-4: #908a7d;
+  --sl-color-gray-5: #ccc6b8;
+  --sl-color-gray-6: #e8e3d7;
+  --sl-color-gray-7: #f2efe6;
+  --sl-color-black: #faf9f5; /* 背景（アイボリー） */
+
+  --sl-color-bg: #faf9f5;
+  --sl-color-bg-nav: #f4f1e8;
+  --sl-color-bg-sidebar: #f4f1e8;
+  --sl-color-hairline-shade: #e7e2d6;
 }
 
-/* サイトタイトルを等幅にしてテックリード感を出す */
+/* サイトタイトル: クリーンなサンセリフで（ターミナル風プレフィックスは廃止） */
 .site-title {
-  font-family: var(--tech-mono);
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
-/* タイトル先頭にプロンプト記号を添える */
-.site-title::before {
-  content: "~/ ";
-  color: var(--sl-color-accent);
-  opacity: 0.8;
+/* 見出しを少し引き締める */
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+.content-panel h1 {
+  letter-spacing: -0.015em;
+  font-weight: 600;
 }
 
-/* ページ見出しに軽くテック感を */
-.content-panel h1,
-.content-panel h2 {
-  letter-spacing: -0.01em;
-}
-
-/* インラインコードを少し際立たせる */
+/* インラインコードを落ち着いた枠付きに */
 .sl-markdown-content code:not(:where(pre code)) {
-  font-family: var(--tech-mono);
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.25rem;
+  font-family: var(--sl-font-mono);
+  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-hairline-shade);
+  border-radius: 0.3rem;
   padding: 0.1em 0.35em;
+  font-size: 0.875em;
 }
 
-/* Mermaid 図をカード調に収める */
+/* リンクのアクセントを少しはっきりと */
+.sl-markdown-content a {
+  text-underline-offset: 0.2em;
+}
+
+/* Mermaid 図をカード調にまとめる（背景に馴染ませる） */
 .mermaid {
   display: flex;
   justify-content: center;
   margin-block: 1.25rem;
   padding: 1rem;
-  background: var(--sl-color-gray-7, var(--sl-color-bg-nav));
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.5rem;
+  background: var(--sl-color-bg-sidebar);
+  border: 1px solid var(--sl-color-hairline-shade);
+  border-radius: 0.6rem;
   overflow-x: auto;
 }
