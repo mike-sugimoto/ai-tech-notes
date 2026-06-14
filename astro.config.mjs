@@ -12,9 +12,47 @@ export default defineConfig({
   integrations: [
     // astro-mermaid は Starlight より前に置く（Markdown の ```mermaid を変換するため）
     mermaid({
-      // ライト/ダーク切替に追従させる
-      autoTheme: true,
-      theme: 'default',
+      // Anthropic / Claude docs 風の配色で固定（温かいアイボリーのキャンバス + クレイのアクセント）。
+      // 両モードで一貫した見た目にするため autoTheme は無効化し、base テーマを themeVariables で上書き。
+      autoTheme: false,
+      theme: 'base',
+      mermaidConfig: {
+        fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
+        themeVariables: {
+          fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
+          fontSize: '15px',
+          background: '#f6f4ee',
+          // ノード
+          primaryColor: '#ffffff',
+          mainBkg: '#ffffff',
+          primaryBorderColor: '#c96442', // クレイ
+          primaryTextColor: '#1f1d1a',
+          nodeBorder: '#c96442',
+          nodeTextColor: '#1f1d1a',
+          // 補助（サブグラフ・代替ノード）
+          secondaryColor: '#efe7da',
+          secondaryBorderColor: '#cbb89c',
+          secondaryTextColor: '#1f1d1a',
+          tertiaryColor: '#f1ebdf',
+          tertiaryBorderColor: '#cbb89c',
+          tertiaryTextColor: '#1f1d1a',
+          clusterBkg: '#f1ece1',
+          clusterBorder: '#d9cab0',
+          // 線・ラベル・テキスト
+          lineColor: '#9a8c78',
+          textColor: '#1f1d1a',
+          titleColor: '#1f1d1a',
+          edgeLabelBackground: '#f6f4ee',
+          // ER/シーケンス等の汎用
+          labelBoxBkgColor: '#ffffff',
+          labelBoxBorderColor: '#c96442',
+          actorBkg: '#ffffff',
+          actorBorder: '#c96442',
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 14 },
+        er: { useMaxWidth: true },
+        sequence: { useMaxWidth: true },
+      },
     }),
     starlight({
       title: 'AI Tech Notes',
