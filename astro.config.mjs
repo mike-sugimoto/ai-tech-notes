@@ -32,6 +32,28 @@ export default defineConfig({
         },
       ],
       customCss: ['./src/styles/custom.css'],
+      // Web フォント（Inter + 日本語 Noto Sans JP）。Anthropic 風の配色は custom.css 側で指定。
+      head: [
+        {
+          tag: 'link',
+          attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'preconnect',
+            href: 'https://fonts.gstatic.com',
+            crossorigin: true,
+          },
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'stylesheet',
+            href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+          },
+        },
+      ],
       // 全文検索（Pagefind）は Starlight 標準で有効
       sidebar: [
         {
