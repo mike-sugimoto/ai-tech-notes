@@ -84,14 +84,110 @@
   text-underline-offset: 0.2em;
 }
 
-/* Mermaid 図をカード調にまとめる（背景に馴染ませる） */
+/* Mermaid 図: 温かいアイボリーの「キャンバス」に固定（ライト/ダーク共通）。
+   図の配色は astro.config.mjs の themeVariables 側で指定。 */
 .mermaid {
   display: flex;
   justify-content: center;
-  margin-block: 1.25rem;
-  padding: 1rem;
-  background: var(--sl-color-bg-sidebar);
+  margin-block: 1.5rem;
+  padding: 1.5rem 1.25rem;
+  background: #f6f4ee;
+  border: 1px solid #e6dcca;
+  border-radius: 0.7rem;
+  overflow-x: auto;
+}
+
+/* 小さすぎる図を読みやすく: コンテンツ幅まで拡大（大きい図は収まるよう縮小） */
+.mermaid svg {
+  width: 100% !important;
+  max-width: 720px !important;
+  height: auto;
+}
+
+/* ダークモードでもキャンバスは明色で統一されるため、枠を少しだけ和らげる */
+:root[data-theme='dark'] .mermaid {
+  border-color: #d9cab0;
+}
+
+/* ============================================================
+   アサイド（注記ボックス）を暖色系に統一
+   ※ 種類の区別は残しつつ、全体をクレイ/アンバー系で揃える
+   ============================================================ */
+.starlight-aside {
+  border-radius: 0.5rem;
+  border: 1px solid var(--sl-color-asides-border);
+  border-inline-start-width: 0.25rem;
+}
+
+/* ダークモード（既定） */
+.starlight-aside--note {
+  --sl-color-asides-text-accent: #d8c4a3;
+  --sl-color-asides-border: #6f6249;
+  background-color: #272320;
+}
+.starlight-aside--tip {
+  --sl-color-asides-text-accent: #ef9f82;
+  --sl-color-asides-border: #c96442;
+  background-color: #33211a;
+}
+.starlight-aside--caution {
+  --sl-color-asides-text-accent: #e7be77;
+  --sl-color-asides-border: #b07d2a;
+  background-color: #312819;
+}
+.starlight-aside--danger {
+  --sl-color-asides-text-accent: #f0a08c;
+  --sl-color-asides-border: #b0492f;
+  background-color: #341d18;
+}
+
+/* ライトモード */
+:root[data-theme='light'] .starlight-aside--note {
+  --sl-color-asides-text-accent: #6f5636;
+  --sl-color-asides-border: #cbb89c;
+  background-color: #f3efe6;
+}
+:root[data-theme='light'] .starlight-aside--tip {
+  --sl-color-asides-text-accent: #a8431f;
+  --sl-color-asides-border: #d98a6a;
+  background-color: #f9ece5;
+}
+:root[data-theme='light'] .starlight-aside--caution {
+  --sl-color-asides-text-accent: #8a5a12;
+  --sl-color-asides-border: #dca94e;
+  background-color: #f8efda;
+}
+:root[data-theme='light'] .starlight-aside--danger {
+  --sl-color-asides-text-accent: #9a2e18;
+  --sl-color-asides-border: #cf6a50;
+  background-color: #f8e5df;
+}
+
+/* ============================================================
+   ページ送り（前へ / 次へ）をモダンでコンパクトに
+   旧: link-title が 2xl で大きすぎ・文字はみ出し → base に縮小
+   ============================================================ */
+.pagination-links a {
+  padding: 0.7rem 0.95rem;
+  gap: 0.55rem;
   border: 1px solid var(--sl-color-hairline-shade);
   border-radius: 0.6rem;
-  overflow-x: auto;
+  box-shadow: none;
+  color: var(--sl-color-gray-3);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.pagination-links a:hover {
+  border-color: var(--sl-color-accent);
+  background: var(--sl-color-gray-6);
+}
+.pagination-links .link-title {
+  color: var(--sl-color-white);
+  font-size: var(--sl-text-base);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+/* 矢印アイコンをアクセント色＆適切なサイズに */
+.pagination-links svg {
+  color: var(--sl-color-accent);
+  font-size: 1.1rem;
 }
