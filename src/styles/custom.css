@@ -1,8 +1,9 @@
 /* ============================================================
-   AI Tech Notes — Anthropic / Claude Code docs 風テーマ
-   温かいアイボリー背景 × クレイ（テラコッタ）アクセント、
-   クリーンなサンセリフ（Inter + Noto Sans JP）。
-   ※ Anthropic 正規フォント(Styrene/Tiempos)は配布不可のため近似フォントを使用。
+   AI Tech Notes — Zenn 風テーマ（濃青ベース）
+   Zenn のような「濃い青」を基調にしたテックサイト配色。
+   ダークモードは深いネイビー背景 × ブライトブルーのアクセント、
+   ライトモードは白 × ブルーグレーの落ち着いた配色。
+   フォントは Inter + Noto Sans JP（Zenn 実フォントは配布不可のため近似）。
    ============================================================ */
 
 :root {
@@ -12,46 +13,46 @@
   --sl-font-mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono',
     'Cascadia Code', 'Menlo', 'Consolas', monospace;
 
-  /* ===== ダークモード（既定）: 温かい墨色 × コーラル ===== */
-  --sl-color-accent-low: #3a2018;
-  --sl-color-accent: #d97757; /* Anthropic コーラル/クレイ */
-  --sl-color-accent-high: #f1c9b9;
+  /* ===== ダークモード（既定）: 深いネイビー × ブライトブルー ===== */
+  --sl-color-accent-low: #16283f;
+  --sl-color-accent: #4dabf7; /* Zenn 風ブライトブルー */
+  --sl-color-accent-high: #cfe6ff;
 
-  --sl-color-white: #f7f4ee; /* 最も明るいテキスト（見出し） */
-  --sl-color-gray-1: #e8e4db;
-  --sl-color-gray-2: #c7c1b5;
-  --sl-color-gray-3: #9d978b;
-  --sl-color-gray-4: #6c675e;
-  --sl-color-gray-5: #423e37;
-  --sl-color-gray-6: #2a2722;
-  --sl-color-black: #1b1a17; /* 背景の基準 */
+  --sl-color-white: #eef4fb; /* 最も明るいテキスト（見出し） */
+  --sl-color-gray-1: #d7e2ef;
+  --sl-color-gray-2: #b0c1d6;
+  --sl-color-gray-3: #8199b8;
+  --sl-color-gray-4: #5a7096;
+  --sl-color-gray-5: #33455f;
+  --sl-color-gray-6: #1c2b42;
+  --sl-color-black: #0b1626; /* 背景の基準 */
 
-  --sl-color-bg: #1b1a17;
-  --sl-color-bg-nav: #211f1b;
-  --sl-color-bg-sidebar: #1f1d19;
-  --sl-color-hairline-shade: #322e28;
+  --sl-color-bg: #0b1626;
+  --sl-color-bg-nav: #0e1d33;
+  --sl-color-bg-sidebar: #0e1d33;
+  --sl-color-hairline-shade: #1e304a;
 }
 
 :root[data-theme='light'] {
-  /* ===== ライトモード: アイボリー × 深いクレイ ===== */
-  --sl-color-accent-low: #f3ddd2;
-  --sl-color-accent: #b8552f; /* 文字/リンク用にコントラストを確保したクレイ */
-  --sl-color-accent-high: #5a2615;
+  /* ===== ライトモード: 白 × 濃青アクセント ===== */
+  --sl-color-accent-low: #d6e9ff;
+  --sl-color-accent: #0b6fda; /* 文字/リンク用にコントラストを確保した濃青 */
+  --sl-color-accent-high: #063a73;
 
-  --sl-color-white: #1b1a17; /* ライトでは「白」が最も濃いテキスト色になる */
-  --sl-color-gray-1: #2a2722;
-  --sl-color-gray-2: #423e37;
-  --sl-color-gray-3: #6c675e;
-  --sl-color-gray-4: #908a7d;
-  --sl-color-gray-5: #ccc6b8;
-  --sl-color-gray-6: #e8e3d7;
-  --sl-color-gray-7: #f2efe6;
-  --sl-color-black: #faf9f5; /* 背景（アイボリー） */
+  --sl-color-white: #0b1626; /* ライトでは「白」が最も濃いテキスト色になる */
+  --sl-color-gray-1: #1c2b42;
+  --sl-color-gray-2: #33455f;
+  --sl-color-gray-3: #5a7096;
+  --sl-color-gray-4: #8199b8;
+  --sl-color-gray-5: #c3d4e8;
+  --sl-color-gray-6: #e4eefb;
+  --sl-color-gray-7: #f2f7fd;
+  --sl-color-black: #ffffff; /* 背景（白） */
 
-  --sl-color-bg: #faf9f5;
-  --sl-color-bg-nav: #f4f1e8;
-  --sl-color-bg-sidebar: #f4f1e8;
-  --sl-color-hairline-shade: #e7e2d6;
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: #f2f7fd;
+  --sl-color-bg-sidebar: #f2f7fd;
+  --sl-color-hairline-shade: #dbe8f7;
 }
 
 /* サイトタイトル: クリーンなサンセリフで（ターミナル風プレフィックスは廃止） */
@@ -84,15 +85,15 @@
   text-underline-offset: 0.2em;
 }
 
-/* Mermaid 図: 温かいアイボリーの「キャンバス」に固定（ライト/ダーク共通）。
+/* Mermaid 図: 淡いブルーグレーの「キャンバス」に固定（ライト/ダーク共通）。
    図の配色は astro.config.mjs の themeVariables 側で指定。 */
 .mermaid {
   display: flex;
   justify-content: center;
   margin-block: 1.5rem;
   padding: 1.5rem 1.25rem;
-  background: #f6f4ee;
-  border: 1px solid #e6dcca;
+  background: #eef5fc;
+  border: 1px solid #cfe0f2;
   border-radius: 0.7rem;
   overflow-x: auto;
 }
@@ -106,12 +107,13 @@
 
 /* ダークモードでもキャンバスは明色で統一されるため、枠を少しだけ和らげる */
 :root[data-theme='dark'] .mermaid {
-  border-color: #d9cab0;
+  border-color: #a9c8e8;
 }
 
 /* ============================================================
-   アサイド（注記ボックス）を暖色系に統一
-   ※ 種類の区別は残しつつ、全体をクレイ/アンバー系で揃える
+   アサイド（注記ボックス）を青系で統一
+   ※ 種類の区別は残しつつ、note/tip はブルー系、caution/danger は
+   　 意味を保つためアンバー/レッド系のまま
    ============================================================ */
 .starlight-aside {
   border-radius: 0.5rem;
@@ -121,36 +123,36 @@
 
 /* ダークモード（既定） */
 .starlight-aside--note {
-  --sl-color-asides-text-accent: #d8c4a3;
-  --sl-color-asides-border: #6f6249;
-  background-color: #272320;
+  --sl-color-asides-text-accent: #a9c8e8;
+  --sl-color-asides-border: #3a5a82;
+  background-color: #12213a;
 }
 .starlight-aside--tip {
-  --sl-color-asides-text-accent: #ef9f82;
-  --sl-color-asides-border: #c96442;
-  background-color: #33211a;
+  --sl-color-asides-text-accent: #7cc4ff;
+  --sl-color-asides-border: #3e8ed0;
+  background-color: #0f2740;
 }
 .starlight-aside--caution {
   --sl-color-asides-text-accent: #e7be77;
   --sl-color-asides-border: #b07d2a;
-  background-color: #312819;
+  background-color: #2c2416;
 }
 .starlight-aside--danger {
   --sl-color-asides-text-accent: #f0a08c;
   --sl-color-asides-border: #b0492f;
-  background-color: #341d18;
+  background-color: #301a16;
 }
 
 /* ライトモード */
 :root[data-theme='light'] .starlight-aside--note {
-  --sl-color-asides-text-accent: #6f5636;
-  --sl-color-asides-border: #cbb89c;
-  background-color: #f3efe6;
+  --sl-color-asides-text-accent: #33455f;
+  --sl-color-asides-border: #b0c1d6;
+  background-color: #eef4fb;
 }
 :root[data-theme='light'] .starlight-aside--tip {
-  --sl-color-asides-text-accent: #a8431f;
-  --sl-color-asides-border: #d98a6a;
-  background-color: #f9ece5;
+  --sl-color-asides-text-accent: #0b6fda;
+  --sl-color-asides-border: #7cb8f2;
+  background-color: #e6f2ff;
 }
 :root[data-theme='light'] .starlight-aside--caution {
   --sl-color-asides-text-accent: #8a5a12;
@@ -165,7 +167,6 @@
 
 /* ============================================================
    ページ送り（前へ / 次へ）をモダンでコンパクトに
-   旧: link-title が 2xl で大きすぎ・文字はみ出し → base に縮小
    ============================================================ */
 .pagination-links a {
   padding: 0.7rem 0.95rem;
