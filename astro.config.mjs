@@ -12,7 +12,7 @@ export default defineConfig({
   integrations: [
     // astro-mermaid は Starlight より前に置く（Markdown の ```mermaid を変換するため）
     mermaid({
-      // Anthropic / Claude docs 風の配色で固定（温かいアイボリーのキャンバス + クレイのアクセント）。
+      // Zenn 風の配色で固定（淡いブルーグレーのキャンバス + 濃青のアクセント）。
       // 両モードで一貫した見た目にするため autoTheme は無効化し、base テーマを themeVariables で上書き。
       autoTheme: false,
       theme: 'base',
@@ -21,33 +21,33 @@ export default defineConfig({
         themeVariables: {
           fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
           fontSize: '15px',
-          background: '#f6f4ee',
+          background: '#eef5fc',
           // ノード
           primaryColor: '#ffffff',
           mainBkg: '#ffffff',
-          primaryBorderColor: '#c96442', // クレイ
-          primaryTextColor: '#1f1d1a',
-          nodeBorder: '#c96442',
-          nodeTextColor: '#1f1d1a',
+          primaryBorderColor: '#3e8ed0', // 濃青
+          primaryTextColor: '#0b1626',
+          nodeBorder: '#3e8ed0',
+          nodeTextColor: '#0b1626',
           // 補助（サブグラフ・代替ノード）
-          secondaryColor: '#efe7da',
-          secondaryBorderColor: '#cbb89c',
-          secondaryTextColor: '#1f1d1a',
-          tertiaryColor: '#f1ebdf',
-          tertiaryBorderColor: '#cbb89c',
-          tertiaryTextColor: '#1f1d1a',
-          clusterBkg: '#f1ece1',
-          clusterBorder: '#d9cab0',
+          secondaryColor: '#dceafb',
+          secondaryBorderColor: '#a9c8e8',
+          secondaryTextColor: '#0b1626',
+          tertiaryColor: '#e4eefb',
+          tertiaryBorderColor: '#a9c8e8',
+          tertiaryTextColor: '#0b1626',
+          clusterBkg: '#e0ecfa',
+          clusterBorder: '#b6d1ee',
           // 線・ラベル・テキスト
-          lineColor: '#9a8c78',
-          textColor: '#1f1d1a',
-          titleColor: '#1f1d1a',
-          edgeLabelBackground: '#f6f4ee',
+          lineColor: '#5a7096',
+          textColor: '#0b1626',
+          titleColor: '#0b1626',
+          edgeLabelBackground: '#eef5fc',
           // ER/シーケンス等の汎用
           labelBoxBkgColor: '#ffffff',
-          labelBoxBorderColor: '#c96442',
+          labelBoxBorderColor: '#3e8ed0',
           actorBkg: '#ffffff',
-          actorBorder: '#c96442',
+          actorBorder: '#3e8ed0',
         },
         flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 14 },
         er: { useMaxWidth: true },
@@ -70,7 +70,7 @@ export default defineConfig({
         },
       ],
       customCss: ['./src/styles/custom.css'],
-      // Web フォント（Inter + 日本語 Noto Sans JP）。Anthropic 風の配色は custom.css 側で指定。
+      // Web フォント（Inter + 日本語 Noto Sans JP）。Zenn 風の濃青配色は custom.css 側で指定。
       head: [
         {
           tag: 'link',
