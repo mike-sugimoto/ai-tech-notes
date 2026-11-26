@@ -3,6 +3,7 @@ title: システム全体像
 description: ナレッジAIシステムの構成要素・データの流れと、なぜこの設計に至ったかの背景。
 sidebar:
   order: 2
+lastUpdated: 2026-11-27
 ---
 
 ナレッジ AI システムの全体像を俯瞰します。
@@ -14,42 +15,34 @@ sidebar:
 
 ```mermaid
 flowchart TB
-    subgraph Sources["データソース（MS中心）"]
-        FS[File Server]
-        CF[Confluence]
-        JR[JIRA]
-        GH[GitHub]
-        SP[SharePoint]
-    end
+    User([利用者])
 
-    subgraph Ingest["取り込み / 正規化"]
-        CN[コネクタ] --> NM[正規化・Markdown化]
-        NM --> MT[メタデータ/タグ付与]
-        MT --> CH[チャンク分割]
-        CH --> EMB[埋め込み生成]
+    subgraph Serve["回答生成 — 問い合わせ時"]
+        direction LR
+        ORCH[オーケストレーター<br/>Agent] --> LLM[LLM] --> Ans[/回答・ドラフト<br/>レビュー/]
+        ORCH --> MCP[MCP サーバ群<br/>実行時に取得]
+        ORCH -.-> OBS[[ログ・コスト計測]]
     end
 
     subgraph Store["インデックス"]
-        VDB[(ベクトルDB)]
-        KW[(全文/キーワード索引)]
+        direction LR
+        VDB[(ベクトル索引)] ~~~ KW[(キーワード索引)]
     end
 
-    subgraph Serve["回答生成"]
-        ORCH[オーケストレーター / Agent]
-        MCP[MCP サーバ群]
-        LLM[LLM]
+    subgraph Ingest["取り込み・正規化 — 事前処理"]
+        direction LR
+        CN[コネクタ] --> NM[Markdown<br/>正規化] --> MT[メタデータ<br/>付与] --> CH[チャンク分割<br/>埋め込み]
     end
 
-    Sources --> CN
-    EMB --> VDB
-    NM --> KW
-    User[利用者] --> ORCH
-    ORCH --> VDB
-    ORCH --> KW
-    ORCH --> MCP
-    ORCH --> LLM
-    LLM --> Ans[回答 / ドラフト / レビュー]
-    ORCH --> OBS[ログ・コスト計測]
+    subgraph Sources["データソース（MS 中心）"]
+        direction LR
+        FS[File Server] ~~~ SP[SharePoint] ~~~ CF[Confluence] ~~~ JR[JIRA] ~~~ GH[GitHub]
+    end
+
+    User --> Serve
+    Serve -- ハイブリッド検索 --> Store
+    Store ---|▲ 索引化| Ingest
+    Ingest ---|▲ 増分同期| Sources
 ```
 
 ## 構成要素のマッピング
@@ -68,16 +61,18 @@ flowchart TB
 ここを分けて捉えることが、設計理解の第一歩です。
 
 ```mermaid
-flowchart LR
-    subgraph Offline["① 事前処理（バッチ・非同期・重い）"]
+flowchart TB
+    subgraph Offline["① 事前処理 — バッチ・非同期・重い"]
         direction LR
-        D[文書] --> N[正規化/MD化] --> M[メタデータ付与] --> C[チャンク] --> E[埋め込み] --> X[(索引)]
+        D[文書] --> N[正規化] --> M[メタデータ] --> C[チャンク] --> E[埋め込み]
     end
-    subgraph Online["② 問い合わせ時（同期・低レイテンシ・軽い）"]
+    X[(索引)]
+    subgraph Online["② 問い合わせ時 — 同期・低レイテンシ・軽い"]
         direction LR
-        Q[質問] --> R[検索] --> RR[リランク] --> G[LLM生成] --> A[回答]
+        Q[質問] --> R[検索] --> RR[リランク] --> G[LLM 生成] --> A[回答]
     end
-    X -. 索引を参照 .-> R
+    Offline --> X
+    X -. 索引を参照 .-> Online
 ```
 
 | パス | タイミング | 性質 | 最適化の方向 |
@@ -151,6 +146,17 @@ flowchart LR
 - **避けたアンチパターン:** コスト未計測のまま全社展開 → 想定外の請求・改善の手がかり無し。
   → 詳細: [コスト・ROI](/ai-tech-notes/cost-roi/)
 
+### 9. 取得したコンテンツは「命令」ではなく「データ」として扱う
+
+- **判断:** 検索結果・MCP の応答・添付文書の中身は**信頼できない入力**として扱い、
+  システムプロンプトと明確に分離する。書き込み系ツールは人の承認か最小権限で実行する。
+- **背景・理由:** RAG や MCP は外部テキストをそのままコンテキストに入れるため、
+  文書内に埋め込まれた指示に従ってしまう **間接プロンプトインジェクション** の入口になる。
+  OWASP の LLM Top 10（2025 年版）でもプロンプトインジェクションが筆頭（LLM01）で、
+  ベクトル/埋め込みの弱点（LLM08）や過剰な権限（LLM06 Excessive Agency）が新たに重視されている。
+- **避けたアンチパターン:** 取得文書の指示をそのまま実行／エージェントに広い書き込み権限を与える。
+  → 詳細: [MCP サーバ構成](/ai-tech-notes/mcp/server-design/)
+
 ## 避けたアンチパターン（設計レベルまとめ）
 
 上記を一覧にすると、この設計は次の落とし穴を構造的に回避しています。
@@ -165,6 +171,7 @@ flowchart LR
 | 権限を後付け | 情報漏えいリスク | 検索段で権限フィルタ |
 | コスト未計測で全社展開 | 想定外の高コスト | 設計段階で試算 ＋ 継続監視 |
 | フロントから LLM 直叩き | 統制・ログが分散 | オーケストレーターに集約 |
+| 取得文書の指示をそのまま実行 | 間接プロンプトインジェクション | 取得内容はデータ扱い・最小権限 |
 
 ## 規模別の構成バリエーション
 
@@ -178,6 +185,37 @@ flowchart LR
 | 評価 | 小さな評価セット | 定例評価 | CI 的に自動評価 |
 | MCP 連携 | 任意 | 主要連携 | 統制された複数連携 |
 | 運用 | 手動 | ログ・コスト監視 | 可観測性・アラート・増分同期 |
+
+## 2026 年時点のアップデート
+
+上の全体像は 2024 年頃の「素朴な RAG」から大きくは変わりませんが、各レイヤの実装手段は進化しています。
+設計時は次の変化を前提に置いてください。
+
+| 領域 | 変化 | 全体像への影響 |
+| --- | --- | --- |
+| 検索 | **エージェント型検索（agentic retrieval）**: LLM が質問を分解してサブクエリを並列実行し、結果を統合・リランクして返す方式がマネージドで提供され始めた（Azure AI Search / Foundry IQ） | オーケストレーターの「検索計画」部分を検索基盤側に寄せられる。ただしクエリ計画分の LLM コストが増える |
+| 検索 | **文脈付きチャンク（Contextual Retrieval）**: チャンクに文書全体の文脈を短く付与してから埋め込み・BM25 索引化する手法 | 取り込み処理に LLM 呼び出しが増えるが、プロンプトキャッシュで安価に実行できる |
+| 権限 | 検索基盤が **Entra ID のユーザー/グループや SharePoint の ACL を索引に取り込み、クエリ時にトリミング**する機能を提供（一部プレビュー） | 「権限は検索段で効かせる」を自前実装せずに実現できる選択肢が増えた |
+| 接続 | **MCP が事実上の標準**に。仕様は 2025-11-25 版で長時間処理（Tasks）や認可まわりが拡充。M365 Copilot でも MCP ベースの **federated コネクタ**（索引化せず実行時取得）が登場 | 「静的は RAG、動的は MCP」の分担がプラットフォーム側でも明確になった |
+| 運用 | LLM 呼び出しのトレース属性を揃える **OpenTelemetry GenAI セマンティック規約**が整備中 | ログ・コスト計測をベンダー非依存の形式で組み込める |
+
+:::caution[プレビュー機能に注意]
+エージェント型検索や ACL 連携などは、2026 年 11 月時点でプレビュー扱いの機能を含みます。
+本番採用前に、出典リンク先で GA 状況・API バージョン・料金を必ず確認してください。
+:::
+
+## 作るか・使うか（Build vs Buy）
+
+全体像のどこまでを自前で作るかは、最初に決めるべき大きな分岐です。
+
+| 選択肢 | 向くケース | 自前で持つ範囲 | 注意点 |
+| --- | --- | --- | --- |
+| **M365 Copilot ＋ Copilot コネクタ** | 社員の日常業務での Q&A。M365 にデータの大半がある | ほぼ無し（コネクタ設定・権限・ガバナンス） | 回答ロジックやプロンプトの制御は限定的 |
+| **マネージド検索基盤（Azure AI Search / Foundry IQ）＋ 自前エージェント** | 業務特化の回答・ドラフト・レビュー。精度を作り込みたい | オーケストレーター・プロンプト・評価 | 検索基盤の料金体系（リランク・クエリ計画のトークン課金）を試算 |
+| **フルスクラッチ（OSS ベクトル DB 等）** | 特殊な要件・オンプレ制約・大規模で単価を下げたい | すべて（取り込み・索引・権限・運用） | 権限トリミングと失効同期の実装・運用負荷が大きい |
+
+→ 比較の観点は [システム選定（コスト視点）](/ai-tech-notes/cost-roi/system-selection/) と
+[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/mcp/m365-copilot-claude-reference/) も参照してください。
 
 ## コンポーネント選定の指針
 
@@ -198,8 +236,23 @@ flowchart LR
 - [ ] 取り込みで正規化（MD）＋メタデータ付与をしているか
 - [ ] 評価データセットがあり、変更のたびに計測しているか
 - [ ] トークン/コスト/レイテンシを最初から計測しているか
+- [ ] 取得コンテンツを「データ」として扱い、書き込み系ツールは最小権限か（プロンプトインジェクション対策）
+- [ ] 作るか・使うか（Copilot / マネージド検索 / フルスクラッチ）の判断根拠を残したか
+- [ ] プレビュー機能に依存する箇所を把握し、GA 状況を確認したか
 - [ ] 規模（PoC→部門→全社）に応じた段階計画があるか
 
 :::tip
 このページは「なぜ」をまとめた地図です。各判断の実装詳細は、リンク先の各セクションで深掘りしてください。
 :::
+
+## 参考・出典
+
+- [Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval) — Anthropic
+- [Relevance in Azure AI Search（ハイブリッド検索・セマンティックランカー・エージェント型検索）](https://learn.microsoft.com/azure/search/search-relevance-overview) — Microsoft Learn
+- [Agentic retrieval in Azure AI Search](https://learn.microsoft.com/azure/search/agentic-retrieval-overview) — Microsoft Learn
+- [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq) — Microsoft Learn
+- [Document-level access control in Azure AI Search](https://learn.microsoft.com/azure/search/search-document-level-access-overview) — Microsoft Learn
+- [Microsoft 365 Copilot connectors overview](https://learn.microsoft.com/microsoftsearch/connectors-overview) — Microsoft Learn
+- [Model Context Protocol Specification（2025-11-25）](https://modelcontextprotocol.io/specification/2025-11-25) — modelcontextprotocol.io
+- [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/) — OWASP GenAI Security Project
+- [Semantic Conventions for Generative AI systems](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — OpenTelemetry

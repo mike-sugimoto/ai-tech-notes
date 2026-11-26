@@ -85,29 +85,180 @@
   text-underline-offset: 0.2em;
 }
 
-/* Mermaid 図: 淡いブルーグレーの「キャンバス」に固定（ライト/ダーク共通）。
-   図の配色は astro.config.mjs の themeVariables 側で指定。 */
-.mermaid {
+/* ============================================================
+   Mermaid 図 — Zenn 風のフラットなダイアグラム
+   - ライト/ダークで配色を切り替える（図は1回だけ描画し、色は CSS 変数で上書き）
+   - astro-mermaid が注入する既定スタイル（pre.mermaid[data-processed] 等）や
+     Mermaid が SVG 内に埋め込む #id 付きスタイルより優先させるため、
+     ここでは詳細度を上げた上で !important を使う
+   ============================================================ */
+:root {
+  /* ダーク（既定） */
+  --dg-canvas: #0f1e34;
+  --dg-canvas-border: #1e304a;
+  --dg-dot: rgba(148, 178, 214, 0.08);
+  --dg-node-bg: #142843;
+  --dg-node-border: #2d4b72;
+  --dg-node-text: #e6eef8;
+  --dg-accent: #4dabf7;
+  --dg-accent-bg: #133559;
+  --dg-cluster-bg: rgba(77, 171, 247, 0.06);
+  --dg-cluster-border: #27456b;
+  --dg-cluster-text: #7cc4ff;
+  --dg-edge: #6f87a8;
+  --dg-edge-label-bg: #1a2e4b;
+  --dg-edge-label-text: #b0c1d6;
+  --dg-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+:root[data-theme='light'] {
+  --dg-canvas: #f7fafd;
+  --dg-canvas-border: #e1eaf4;
+  --dg-dot: rgba(62, 112, 168, 0.07);
+  --dg-node-bg: #ffffff;
+  --dg-node-border: #c9d9ec;
+  --dg-node-text: #1c2b42;
+  --dg-accent: #3ea8ff;
+  --dg-accent-bg: #e8f4ff;
+  --dg-cluster-bg: rgba(62, 168, 255, 0.05);
+  --dg-cluster-border: #cfe2f6;
+  --dg-cluster-text: #0b6fda;
+  --dg-edge: #93a6bf;
+  --dg-edge-label-bg: #ffffff;
+  --dg-edge-label-text: #4a5f7e;
+  --dg-shadow: 0 1px 2px rgba(15, 40, 80, 0.08);
+}
+
+/* キャンバス（カード） */
+.sl-markdown-content pre.mermaid,
+.sl-markdown-content pre.mermaid[data-processed] {
   display: flex;
   justify-content: center;
-  margin-block: 1.5rem;
-  padding: 1.5rem 1.25rem;
-  background: #eef5fc;
-  border: 1px solid #cfe0f2;
-  border-radius: 0.7rem;
+  margin-block: 1.75rem !important;
+  padding: 1.75rem 1.25rem !important;
+  background-color: var(--dg-canvas) !important;
+  background-image: radial-gradient(var(--dg-dot) 1px, transparent 1px) !important;
+  background-size: 16px 16px !important;
+  border: 1px solid var(--dg-canvas-border) !important;
+  border-radius: 0.75rem !important;
   overflow-x: auto;
+  line-height: 1.4;
 }
 
-/* 小さすぎる図を読みやすく: コンテンツ幅まで拡大（大きい図は収まるよう縮小） */
-.mermaid svg {
+/* 図は自然サイズ（文字 16px）で表示し、本文幅を超える場合だけ縮小する。
+   Mermaid が svg に付ける inline の max-width（=自然幅）を上限として生かす。 */
+.sl-markdown-content pre.mermaid svg {
   width: 100% !important;
-  max-width: 720px !important;
   height: auto;
+  font-family: var(--sl-font) !important;
 }
 
-/* ダークモードでもキャンバスは明色で統一されるため、枠を少しだけ和らげる */
-:root[data-theme='dark'] .mermaid {
-  border-color: #a9c8e8;
+/* --- フローチャート: ノード --- */
+.sl-markdown-content pre.mermaid .node rect,
+.sl-markdown-content pre.mermaid .node polygon,
+.sl-markdown-content pre.mermaid .node circle,
+.sl-markdown-content pre.mermaid .node ellipse,
+.sl-markdown-content pre.mermaid .node path {
+  fill: var(--dg-node-bg) !important;
+  stroke: var(--dg-node-border) !important;
+  stroke-width: 1.25px !important;
+  filter: drop-shadow(var(--dg-shadow));
+}
+.sl-markdown-content pre.mermaid .node rect {
+  rx: 8px;
+  ry: 8px;
+}
+/* データストア（円柱 [( )]）はアクセント色で区別 */
+.sl-markdown-content pre.mermaid .node path.outer-path[d*=' a'] {
+  fill: var(--dg-accent-bg) !important;
+  stroke: var(--dg-accent) !important;
+}
+.sl-markdown-content pre.mermaid .node .label,
+.sl-markdown-content pre.mermaid .node .nodeLabel,
+.sl-markdown-content pre.mermaid .node text,
+.sl-markdown-content pre.mermaid .node span {
+  color: var(--dg-node-text) !important;
+  fill: var(--dg-node-text) !important;
+}
+
+/* --- サブグラフ --- */
+.sl-markdown-content pre.mermaid .cluster rect {
+  fill: var(--dg-cluster-bg) !important;
+  stroke: var(--dg-cluster-border) !important;
+  stroke-width: 1px !important;
+  stroke-dasharray: 5 4;
+  rx: 10px;
+  ry: 10px;
+}
+.sl-markdown-content pre.mermaid .cluster-label,
+.sl-markdown-content pre.mermaid .cluster-label span,
+.sl-markdown-content pre.mermaid .cluster-label .nodeLabel,
+.sl-markdown-content pre.mermaid .cluster text {
+  color: var(--dg-cluster-text) !important;
+  fill: var(--dg-cluster-text) !important;
+  font-weight: 600;
+}
+
+/* --- エッジ（線・矢印） --- */
+.sl-markdown-content pre.mermaid .flowchart-link,
+.sl-markdown-content pre.mermaid .edgePath .path,
+.sl-markdown-content pre.mermaid .edge-thickness-normal {
+  stroke: var(--dg-edge) !important;
+  stroke-width: 1.5px !important;
+}
+.sl-markdown-content pre.mermaid .marker,
+.sl-markdown-content pre.mermaid marker path {
+  fill: var(--dg-edge) !important;
+  stroke: var(--dg-edge) !important;
+}
+/* エッジラベル: 小さなピル型 */
+.sl-markdown-content pre.mermaid .edgeLabel,
+.sl-markdown-content pre.mermaid .edgeLabel p,
+.sl-markdown-content pre.mermaid .edgeLabel span,
+.sl-markdown-content pre.mermaid .labelBkg {
+  background-color: var(--dg-edge-label-bg) !important;
+  color: var(--dg-edge-label-text) !important;
+  fill: var(--dg-edge-label-text) !important;
+}
+.sl-markdown-content pre.mermaid .edgeLabel rect {
+  fill: var(--dg-edge-label-bg) !important;
+  opacity: 1 !important;
+}
+.sl-markdown-content pre.mermaid .edgeLabel p,
+.sl-markdown-content pre.mermaid .labelBkg {
+  border-radius: 4px;
+}
+
+/* --- マインドマップ --- */
+.sl-markdown-content pre.mermaid .mindmap-node rect,
+.sl-markdown-content pre.mermaid .mindmap-node path,
+.sl-markdown-content pre.mermaid .mindmap-node circle,
+.sl-markdown-content pre.mermaid .mindmap-node polygon {
+  fill: var(--dg-node-bg) !important;
+  stroke: var(--dg-node-border) !important;
+  stroke-width: 1.25px !important;
+}
+.sl-markdown-content pre.mermaid .mindmap-node.section-root rect,
+.sl-markdown-content pre.mermaid .mindmap-node.section-root path,
+.sl-markdown-content pre.mermaid .mindmap-node.section-root circle,
+.sl-markdown-content pre.mermaid .mindmap-node.section--1 rect,
+.sl-markdown-content pre.mermaid .mindmap-node.section--1 path,
+.sl-markdown-content pre.mermaid .mindmap-node.section--1 circle {
+  fill: var(--dg-accent-bg) !important;
+  stroke: var(--dg-accent) !important;
+}
+.sl-markdown-content pre.mermaid .mindmap-node text,
+.sl-markdown-content pre.mermaid .mindmap-node span,
+.sl-markdown-content pre.mermaid .mindmap-node .nodeLabel {
+  color: var(--dg-node-text) !important;
+  fill: var(--dg-node-text) !important;
+}
+.sl-markdown-content pre.mermaid .mindmap-node line {
+  stroke: var(--dg-accent) !important;
+}
+.sl-markdown-content pre.mermaid .mindmap-edges path,
+.sl-markdown-content pre.mermaid path.edge {
+  stroke: var(--dg-edge) !important;
+  stroke-width: 1.5px !important;
 }
 
 /* ============================================================
