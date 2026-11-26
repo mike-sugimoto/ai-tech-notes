@@ -50,6 +50,8 @@ export default defineConfig({
       ],
       // 全文検索（Pagefind）は Starlight 標準で有効
       sidebar: [
+        // トップページ（index.mdx）をメニュー先頭に統合
+        { label: 'トップ', link: '/' },
         {
           label: 'はじめに',
           items: [{ autogenerate: { directory: 'overview' } }],
