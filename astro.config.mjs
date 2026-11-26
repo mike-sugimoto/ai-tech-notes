@@ -10,50 +10,6 @@ export default defineConfig({
   base: '/ai-tech-notes',
   trailingSlash: 'always',
   integrations: [
-    // astro-mermaid は Starlight より前に置く（Markdown の ```mermaid を変換するため）
-    mermaid({
-      // Zenn 風の配色で固定（淡いブルーグレーのキャンバス + 濃青のアクセント）。
-      // 両モードで一貫した見た目にするため autoTheme は無効化し、base テーマを themeVariables で上書き。
-      autoTheme: false,
-      theme: 'base',
-      mermaidConfig: {
-        fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
-        themeVariables: {
-          fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
-          fontSize: '15px',
-          background: '#eef5fc',
-          // ノード
-          primaryColor: '#ffffff',
-          mainBkg: '#ffffff',
-          primaryBorderColor: '#3e8ed0', // 濃青
-          primaryTextColor: '#0b1626',
-          nodeBorder: '#3e8ed0',
-          nodeTextColor: '#0b1626',
-          // 補助（サブグラフ・代替ノード）
-          secondaryColor: '#dceafb',
-          secondaryBorderColor: '#a9c8e8',
-          secondaryTextColor: '#0b1626',
-          tertiaryColor: '#e4eefb',
-          tertiaryBorderColor: '#a9c8e8',
-          tertiaryTextColor: '#0b1626',
-          clusterBkg: '#e0ecfa',
-          clusterBorder: '#b6d1ee',
-          // 線・ラベル・テキスト
-          lineColor: '#5a7096',
-          textColor: '#0b1626',
-          titleColor: '#0b1626',
-          edgeLabelBackground: '#eef5fc',
-          // ER/シーケンス等の汎用
-          labelBoxBkgColor: '#ffffff',
-          labelBoxBorderColor: '#3e8ed0',
-          actorBkg: '#ffffff',
-          actorBorder: '#3e8ed0',
-        },
-        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 14 },
-        er: { useMaxWidth: true },
-        sequence: { useMaxWidth: true },
-      },
-    }),
     starlight({
       title: 'AI Tech Notes',
       description: '高精度なAIナレッジ・システム構築のための設計ノート（RAG / MCP / データ設計 / コスト）',
@@ -131,6 +87,50 @@ export default defineConfig({
           items: [{ autogenerate: { directory: 'cost-roi' } }],
         },
       ],
+    }),
+    // astro-mermaid は Starlight より後に置く（Astro 7 では Starlight が設定した Sätteri 処理系に図の変換を追加するため）
+    mermaid({
+      // Zenn 風の配色で固定（淡いブルーグレーのキャンバス + 濃青のアクセント）。
+      // 両モードで一貫した見た目にするため autoTheme は無効化し、base テーマを themeVariables で上書き。
+      autoTheme: false,
+      theme: 'base',
+      mermaidConfig: {
+        fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
+        themeVariables: {
+          fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
+          fontSize: '15px',
+          background: '#eef5fc',
+          // ノード
+          primaryColor: '#ffffff',
+          mainBkg: '#ffffff',
+          primaryBorderColor: '#3e8ed0', // 濃青
+          primaryTextColor: '#0b1626',
+          nodeBorder: '#3e8ed0',
+          nodeTextColor: '#0b1626',
+          // 補助（サブグラフ・代替ノード）
+          secondaryColor: '#dceafb',
+          secondaryBorderColor: '#a9c8e8',
+          secondaryTextColor: '#0b1626',
+          tertiaryColor: '#e4eefb',
+          tertiaryBorderColor: '#a9c8e8',
+          tertiaryTextColor: '#0b1626',
+          clusterBkg: '#e0ecfa',
+          clusterBorder: '#b6d1ee',
+          // 線・ラベル・テキスト
+          lineColor: '#5a7096',
+          textColor: '#0b1626',
+          titleColor: '#0b1626',
+          edgeLabelBackground: '#eef5fc',
+          // ER/シーケンス等の汎用
+          labelBoxBkgColor: '#ffffff',
+          labelBoxBorderColor: '#3e8ed0',
+          actorBkg: '#ffffff',
+          actorBorder: '#3e8ed0',
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 14 },
+        er: { useMaxWidth: true },
+        sequence: { useMaxWidth: true },
+      },
     }),
   ],
 });
