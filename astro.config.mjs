@@ -83,7 +83,7 @@ export default defineConfig({
           items: [{ autogenerate: { directory: 'mcp' } }],
         },
         {
-          label: 'データソース（MS中心）',
+          label: 'データソース',
           items: [{ autogenerate: { directory: 'data-sources' } }],
         },
         {

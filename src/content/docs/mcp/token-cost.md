@@ -2,6 +2,7 @@
 title: トークン消費問題と対策
 description: MCP で膨らみがちなトークン消費の原因と、ツール検索・コード実行など 2026 年時点の具体策。
 sidebar:
+  label: トークン消費対策
   order: 3
 lastUpdated: 2026-11-27
 ---

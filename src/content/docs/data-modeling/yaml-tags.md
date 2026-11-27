@@ -2,6 +2,7 @@
 title: YAML フロントマターとタグ設計
 description: 統制された語彙でタグを付け、検索の質を上げる。語彙辞書のサンプルと運用フロー、自動付与と検証。
 sidebar:
+  label: YAML とタグ設計
   order: 3
 lastUpdated: 2026-11-27
 ---

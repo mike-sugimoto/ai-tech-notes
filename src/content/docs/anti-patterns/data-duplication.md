@@ -2,6 +2,7 @@
 title: データ複製と重複バージョン問題
 description: AI向けにデータを複製したときの重複・版ずれを防ぐ。
 sidebar:
+  label: 重複バージョン問題
   order: 2
 lastUpdated: 2026-11-27
 ---

@@ -2,6 +2,7 @@
 title: システム選定（コスト視点）
 description: ROI を踏まえたモデル・調達経路・提供形態・検索基盤の選定基準。
 sidebar:
+  label: システム選定
   order: 2
 lastUpdated: 2026-11-27
 ---
