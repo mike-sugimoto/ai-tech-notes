@@ -3,6 +3,7 @@ title: 参考アーキテクチャ — M365 Copilot × Claude（RAG / MCP 接続
 description: Microsoft 365 Copilot / Copilot Studio で Claude を使い、社内データに RAG と MCP で接続する具体的な構成例。
 sidebar:
   order: 5
+lastUpdated: 2026-11-27
 ---
 
 **対象読者:** Microsoft 365 環境で **Claude** をエージェントの頭脳に使い、社内データへ
@@ -111,6 +112,10 @@ Microsoft Graph の意味索引へ取り込み、Copilot から検索できる�
   [既存 MCP サーバへ接続](https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent) /
   [MCP のツール/リソースを追加](https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-components-to-agent)
 
+- **公式リモート MCP サーバを優先:** JIRA / Confluence は Atlassian、GitHub は GitHub が公式のリモート MCP サーバを提供している。
+  自作は社内独自システムに絞る（[MCP サーバ構成](/ai-tech-notes/mcp/server-design/)）
+- **書き込み系ツールは慎重に:** 起票・更新などは、読み取りで効果を確認してから必要なものだけ有効化する
+
 ### b. Copilot コネクタ（Federated）という選択肢
 
 プラットフォーム側でも、**Federated コネクタ**は MCP を用いて**実行時にデータを取得**し、
@@ -133,8 +138,9 @@ Microsoft の2つのコネクタモデルは、本サイトの使い分けにそ
 - [ ] **MCP のツール最小化**: 使うツールだけ ON にしてトークンを抑えたか（[トークン対策](/ai-tech-notes/mcp/token-cost/)）
 - [ ] **モデル選定**: ユースケースに対し Claude のモデル/設定が妥当か（[コスト・ROI](/ai-tech-notes/cost-roi/system-selection/)）
 - [ ] **ガバナンス**: Entra ID 認証・Purview/DLP・リージョン要件を満たしているか
+- [ ] **MCP の認証**: 共通アカウントではなく、利用者本人の権限（OAuth）で元システムにアクセスしているか
 
-## 参考リンク（Microsoft Learn 優先）
+## 参考・出典
 
 - モデル: [主モデルの選択](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-select-agent-model) /
   [外部モデルを主モデルに](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-select-external-response-model) /
@@ -147,10 +153,12 @@ Microsoft の2つのコネクタモデルは、本サイトの使い分けにそ
 - コネクタ（RAG/MCP）: [コネクタ概要](https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview) /
   [プレビルトコネクタ](https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/prebuilt-connectors-overview) /
   [拡張機能の概要](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector)
+- 公式 MCP サーバ: [Atlassian Rovo MCP Server](https://support.atlassian.com/rovo/docs/atlassian-remote-mcp-server/) /
+  [GitHub MCP Server](https://github.com/github/github-mcp-server)
 - MCP: [MCP で拡張](https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp) /
   [既存 MCP サーバへ接続](https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent) /
   [ツール/リソース追加](https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-components-to-agent)
 
 :::note
-URL・機能名は 2026 年 6 月時点の調査に基づきます。Microsoft の製品更新で変わる場合があるため、リンク先で最新情報を確認してください。
+URL・機能名は 2026 年 11 月時点で到達を確認しています。Microsoft の製品更新で変わる場合があるため、リンク先で最新情報を確認してください。
 :::

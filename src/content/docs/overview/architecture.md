@@ -196,7 +196,7 @@ flowchart TB
 | 検索 | **エージェント型検索（agentic retrieval）**: LLM が質問を分解してサブクエリを並列実行し、結果を統合・リランクして返す方式がマネージドで提供され始めた（Azure AI Search / Foundry IQ） | オーケストレーターの「検索計画」部分を検索基盤側に寄せられる。ただしクエリ計画分の LLM コストが増える |
 | 検索 | **文脈付きチャンク（Contextual Retrieval）**: チャンクに文書全体の文脈を短く付与してから埋め込み・BM25 索引化する手法 | 取り込み処理に LLM 呼び出しが増えるが、プロンプトキャッシュで安価に実行できる |
 | 権限 | 検索基盤が **Entra ID のユーザー/グループや SharePoint の ACL を索引に取り込み、クエリ時にトリミング**する機能を提供（一部プレビュー） | 「権限は検索段で効かせる」を自前実装せずに実現できる選択肢が増えた |
-| 接続 | **MCP が事実上の標準**に。仕様は 2025-11-25 版で長時間処理（Tasks）や認可まわりが拡充。M365 Copilot でも MCP ベースの **federated コネクタ**（索引化せず実行時取得）が登場 | 「静的は RAG、動的は MCP」の分担がプラットフォーム側でも明確になった |
+| 接続 | **MCP が事実上の標準**に（2025 年 12 月に Linux Foundation 傘下の財団へ移管）。最新の 2026-07-28 版仕様で通信がステートレスになり、スケールしやすくなった。M365 Copilot でも MCP ベースの **federated コネクタ**（索引化せず実行時取得）が登場 | 「静的は RAG、動的は MCP」の分担がプラットフォーム側でも明確になった |
 | 運用 | LLM 呼び出しのトレース属性を揃える **OpenTelemetry GenAI セマンティック規約**が整備中 | ログ・コスト計測をベンダー非依存の形式で組み込める |
 
 :::caution[プレビュー機能に注意]
@@ -253,6 +253,6 @@ flowchart TB
 - [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq) — Microsoft Learn
 - [Document-level access control in Azure AI Search](https://learn.microsoft.com/azure/search/search-document-level-access-overview) — Microsoft Learn
 - [Microsoft 365 Copilot connectors overview](https://learn.microsoft.com/microsoftsearch/connectors-overview) — Microsoft Learn
-- [Model Context Protocol Specification（2025-11-25）](https://modelcontextprotocol.io/specification/2025-11-25) — modelcontextprotocol.io
+- [Model Context Protocol Specification（2026-07-28）](https://modelcontextprotocol.io/specification/2026-07-28) — modelcontextprotocol.io
 - [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/) — OWASP GenAI Security Project
 - [Semantic Conventions for Generative AI systems](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — OpenTelemetry
