@@ -3,6 +3,7 @@ title: チャンク戦略
 description: 文書をどの粒度で分割するかが検索精度を左右する。設計の勘所とアンチパターン。
 sidebar:
   order: 2
+lastUpdated: 2026-11-27
 ---
 
 チャンク（分割単位）の設計は、RAG 精度に最も影響する要素のひとつです。
@@ -18,6 +19,19 @@ sidebar:
 - **コスト**（大きいチャンクを多数渡すと投入トークンが膨らむ）
 
 のすべてを左右します。
+
+## 前提: まず文書を正しく読み取る
+
+チャンク以前に、**PDF や Office 文書から見出し・表の構造を保ったままテキスト化できているか** が精度の土台です。
+PDF をプレーンテキストに変換すると、見出しが本文に埋もれ、表の行と列が崩れます。
+
+- **レイアウト解析で Markdown に変換する:** Azure AI Document Intelligence の Layout モデルは、
+  見出し・表・段落を保った Markdown を出力でき、見出し単位のチャンク分割と相性が良い
+- **検索基盤の取り込み機能を使う:** Azure AI Search の Document Layout スキルを使うと、
+  取り込み時に見出し単位のセクションへ分割できる（解析は別料金。巨大な文書は処理時間の制約に注意）
+- **変換結果を目で確認する:** 代表的な文書を数件変換し、見出し・表が崩れていないかを最初に確認する
+
+→ 形式の方針は [データ形式の方針](/ai-tech-notes/data-modeling/) を参照。
 
 ## 主なチャンク方式
 
@@ -82,6 +96,34 @@ flowchart TB
 - **コードブロック**: 途中で切らない。関数・ブロック単位を意識
 - **画像/図**: キャプションや代替テキストをテキスト化して索引に含める
 
+## 文脈付きチャンク（Contextual Retrieval）
+
+チャンクは切り出した時点で文脈を失います。例えば「前年同期比 3% 増加した」というチャンクだけでは、
+どの会社の、どの期間の話か分かりません。
+
+**文脈付きチャンク** は、取り込み時に LLM で「このチャンクは文書全体の中で何について書かれた部分か」という
+短い説明（50〜100 トークン程度）を生成し、チャンクの先頭に付けてから埋め込み・キーワード索引に登録する手法です。
+
+```mermaid
+flowchart LR
+    DOC[文書全体] --> GEN[LLM で<br/>チャンクの文脈を要約]
+    CH[チャンク] --> GEN
+    GEN --> CC[文脈 ＋ チャンク]
+    CC --> EMB[埋め込み]
+    CC --> BM[キーワード索引]
+```
+
+Anthropic の報告では、検索の失敗率（上位 20 件に正解が無い割合）が
+
+| 構成 | 失敗率の削減 |
+| --- | --- |
+| 文脈付き埋め込みのみ | 約 35% 減 |
+| 文脈付き埋め込み ＋ 文脈付き BM25 | 約 49% 減 |
+| 上記 ＋ リランク | 約 67% 減 |
+
+- 取り込み時の LLM 呼び出しが **チャンク数ぶん** 増えるが、同じ文書全体を毎回渡すため **プロンプトキャッシュで大幅に安くできる**
+- 簡易版として、**文書タイトルと見出しパスをチャンク先頭に付ける** だけでも効果がある（LLM 不要）
+
 ## メタデータの付与
 
 各チャンクには文書メタデータを継承し、出典情報を必ず添えます。
@@ -94,6 +136,7 @@ flowchart TB
 
 ## アンチパターン
 
+- **PDF をプレーンテキスト化しただけ** で投入 → 見出し・表が崩れて検索も出典も不正確
 - **巨大チャンク**で「とりあえず全部入れる」→ ノイズ増・コスト増・精度低下
 - **改行や固定長で機械的に分割**して表・コードを破壊
 - メタデータ無しで投入 → 絞り込めず出典も出せない
@@ -112,3 +155,10 @@ flowchart TB
 
 > **Q. 「チャンクを変えたら精度が変わった。再現できる？」**
 > A. チャンク設定はバージョン管理し、評価スコアと紐づけて記録します。変更＝再評価をルール化します。
+
+## 参考・出典
+
+- [Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval) — Anthropic
+- [Retrieval-Augmented Generation with Azure AI Document Intelligence](https://learn.microsoft.com/azure/ai-services/document-intelligence/concept/retrieval-augmented-generation) — Microsoft Learn
+- [Document Layout skill](https://learn.microsoft.com/azure/search/cognitive-search-skill-document-intelligence-layout) — Microsoft Learn
+- [Chunk and vectorize by document layout（semantic chunking）](https://learn.microsoft.com/azure/search/search-how-to-semantic-chunking) — Microsoft Learn
