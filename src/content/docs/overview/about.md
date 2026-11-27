@@ -65,10 +65,10 @@ AI 関連のサービス名・料金・機能の提供状況は短期間で変�
 ## 読み進め方
 
 1. まず [システム全体像](/ai-tech-notes/overview/architecture/) で俯瞰する（構成・設計判断・作るか使うか）
-2. [ユースケース](/ai-tech-notes/use-cases/) で自分のケースに近いものを見つける
-3. 不安があれば [LLM の基礎](/ai-tech-notes/llm-basics/)（トークン・コンテキストウィンドウ・モデル選定）で土台を固める
-4. 各論（[RAG](/ai-tech-notes/rag/) / [MCP](/ai-tech-notes/mcp/) / [データ](/ai-tech-notes/data-modeling/)）を深掘り
-5. [アンチパターン](/ai-tech-notes/anti-patterns/) と [コスト・ROI](/ai-tech-notes/cost-roi/) で実装判断を固める
+2. 不安があれば [LLM の基礎](/ai-tech-notes/llm-basics/)（トークン・コンテキストウィンドウ・モデル選定）で土台を固める
+3. 各論（[RAG](/ai-tech-notes/rag/) / [MCP](/ai-tech-notes/mcp/) / [データ](/ai-tech-notes/data-modeling/)）を深掘り
+4. [アンチパターン](/ai-tech-notes/anti-patterns/) と [コスト・ROI](/ai-tech-notes/cost-roi/) で実装判断を固める
+5. 最後に [ユースケース](/ai-tech-notes/use-cases/) で自分のケースに近い構成を確認し、ここまでの知識を当てはめる
 
 ## 参考・出典
 

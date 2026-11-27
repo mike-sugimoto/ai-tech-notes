@@ -21,6 +21,9 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'AI Tech Notes',
+      // サイトロゴ（ヘッダーのタイトル横）とファビコン
+      logo: { src: './src/assets/logo.svg', alt: 'AI Tech Notes' },
+      favicon: '/favicon.svg',
       description: '高精度なAIナレッジ・システム構築のための設計ノート（RAG / MCP / データ設計 / コスト）',
       // 単一言語（日本語）サイト。root ロケールを1つだけ定義すると言語切替UIは出ない。
       defaultLocale: 'root',
@@ -68,10 +71,6 @@ export default defineConfig({
           items: [{ autogenerate: { directory: 'overview' } }],
         },
         {
-          label: 'ユースケース',
-          items: [{ autogenerate: { directory: 'use-cases' } }],
-        },
-        {
           label: 'LLM の基礎',
           items: [{ autogenerate: { directory: 'llm-basics' } }],
         },
@@ -98,6 +97,11 @@ export default defineConfig({
         {
           label: 'コスト・ROI',
           items: [{ autogenerate: { directory: 'cost-roi' } }],
+        },
+        // 各論を読んだ後に具体例として読むため、ユースケースは最後に置く
+        {
+          label: 'ユースケース',
+          items: [{ autogenerate: { directory: 'use-cases' } }],
         },
       ],
     }),
