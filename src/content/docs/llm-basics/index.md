@@ -3,6 +3,7 @@ title: LLM の基礎
 description: 大規模言語モデル（LLM）の基本原理。なぜそう振る舞うのかを理解する。
 sidebar:
   order: 1
+lastUpdated: 2026-11-27
 ---
 
 AI システムを正しく設計・選定するには、土台となる **LLM（大規模言語モデル）の原理**を
@@ -15,8 +16,8 @@ LLM は、大量のテキストで学習し、**入力に続いて最も尤も�
 
 ```mermaid
 flowchart LR
-    IN["入力: 東京の首都は"] --> M[(LLM)]
-    M --> P["次トークンの確率分布<br/>『日本』? 『…』?"]
+    IN["入力: 日本の首都は"] --> M[(LLM)]
+    M --> P["次トークンの確率分布<br/>『東京』90% / 『京都』3% …"]
     P --> T1[1トークン生成]
     T1 --> LOOP{続ける?}
     LOOP -->|はい| M
@@ -40,6 +41,20 @@ LLM は「知っていること」を答えるのではなく「もっともら�
 だからこそ、社内文書を **根拠として与える** RAG が高精度回答の鍵になります
 （→ [RAG の基礎](/ai-tech-notes/rag/)）。
 :::
+
+## 2026 年の LLM は「考えてから答える」
+
+近年の主要モデルは、回答を書く前に内部で推論（thinking）を行う **推論モデル** が標準になりました。
+仕組みは同じ「次トークン予測」ですが、最終回答の前に考える過程のトークンを生成することで、
+複雑な問題の正答率が大きく上がります。
+
+| 変化 | 設計への影響 |
+| --- | --- |
+| 推論の深さをパラメータ（effort 等）で調整できる | 難しいタスクだけ深く考えさせ、簡単なタスクは浅くしてコストを抑える |
+| 推論中のトークンも **出力トークンとして課金** される | 画面に推論が表示されなくてもコストは発生する。コスト試算に含める |
+| モデルによっては推論を無効にできない | 「推論なしで安く」は、推論の深さを下げる形で実現する |
+
+→ 詳しくは [生成の制御](/ai-tech-notes/llm-basics/generation-controls/) を参照してください。
 
 ## LLM は記憶を持たない（ステートレス）
 
@@ -78,6 +93,10 @@ flowchart LR
 [コンテキストとキャッシュ](/ai-tech-notes/rag/context-and-caching/)）。
 :::
 
+なお、一部のプロバイダは「会話をサーバ側で短時間保持し、新しいメッセージだけ送ればよい」機能や、
+長い会話を自動で要約する機能（コンパクション）を提供し始めています。
+これらは **送信量や手間を減らす仕組み** であり、モデル自体が記憶を持つようになったわけではありません。
+
 長い会話で精度を保つコツは、**履歴を要約・圧縮して窓を圧迫しない**こと、そして
 **必要な情報だけを入れる**ことです。詳しくは
 [コンテキストウィンドウ](/ai-tech-notes/llm-basics/context-window/) を参照してください。
@@ -89,4 +108,10 @@ flowchart LR
 | [トークン](/ai-tech-notes/llm-basics/tokens/) | テキストの最小単位。コストと密接に関係 |
 | [コンテキストウィンドウ](/ai-tech-notes/llm-basics/context-window/) | 一度に扱える入出力の上限 |
 | [AIモデルの特徴と選定](/ai-tech-notes/llm-basics/models/) | モデルの階層・機能差・選び方 |
-| [生成の制御](/ai-tech-notes/llm-basics/generation-controls/) | max_tokens・ランダム性・推論深さ・ストリーミング |
+| [生成の制御](/ai-tech-notes/llm-basics/generation-controls/) | 出力上限・推論の深さ（effort）・構造化出力・ストリーミング |
+
+## 参考・出典
+
+- [Models overview](https://platform.claude.com/docs/en/about-claude/models/overview) — Claude Platform Docs
+- [Adaptive thinking](https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking) — Claude Platform Docs
+- [Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows) — Claude Platform Docs

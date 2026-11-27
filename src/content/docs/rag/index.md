@@ -3,6 +3,7 @@ title: RAG の基礎
 description: 検索拡張生成の全体像と、高精度化のための構成要素・判断軸。
 sidebar:
   order: 1
+lastUpdated: 2026-11-27
 ---
 
 RAG（Retrieval-Augmented Generation, 検索拡張生成）は、
@@ -16,21 +17,18 @@ LLM に **外部ナレッジを検索して根拠として与える** ことで�
 ## 基本パイプライン
 
 ```mermaid
-flowchart LR
-    subgraph Index["事前処理（バッチ）"]
-        DOC[文書] --> NM[正規化/MD化]
-        NM --> CH[チャンク分割]
-        CH --> EMB[埋め込み]
-        EMB --> VDB[(ベクトルDB)]
+flowchart TB
+    subgraph Index["① 事前処理（バッチ）"]
+        direction LR
+        DOC[文書] --> NM[正規化<br/>Markdown 化] --> CH[チャンク分割] --> EMB[埋め込み]
     end
-    subgraph Query["問い合わせ時"]
-        Q[質問] --> RET[検索]
-        VDB --> RET
-        RET --> RR[リランキング]
-        RR --> CTX[コンテキスト構築]
-        CTX --> LLM[LLM生成]
-        LLM --> ANS[出典付き回答]
+    VDB[(索引<br/>ベクトル ＋ キーワード)]
+    subgraph Query["② 問い合わせ時"]
+        direction LR
+        Q[質問] --> RET[検索] --> RR[リランキング] --> LLM[LLM 生成] --> ANS[出典付き回答]
     end
+    Index --> VDB
+    VDB -. 参照 .-> Query
 ```
 
 RAG は大きく **「事前処理（インデックス構築）」** と **「問い合わせ時（検索→生成）」** の
@@ -61,6 +59,22 @@ RAG の精度は、次の4要素でほぼ決まります。どれか1つだけ�
 | 検索方式 | 再現率・適合率 | [検索とリランキング](/ai-tech-notes/rag/retrieval/) |
 | メタデータ | 絞り込みの効き | [メタデータ](/ai-tech-notes/data-modeling/metadata/) |
 | 評価 | 改善サイクル | [評価](/ai-tech-notes/rag/evaluation/) |
+
+## RAG の進化（2026 年時点）
+
+RAG は「検索して渡す」という基本は同じまま、各段階が高度化しています。
+
+| 段階 | 特徴 | 代表的な手法 |
+| --- | --- | --- |
+| 素朴な RAG | ベクトル検索の上位数件をそのまま渡す | 固定長チャンク ＋ ベクトル検索 |
+| 高度化した RAG | 取りこぼしとノイズを減らす工夫を重ねる | ハイブリッド検索、リランク、[文脈付きチャンク](/ai-tech-notes/rag/chunking/#文脈付きチャンクcontextual-retrieval)、メタデータ・権限フィルタ |
+| エージェント型 RAG | LLM が検索計画を立て、必要に応じて複数回・複数ソースを検索する | 質問の分解とサブクエリの並列実行（[エージェント型検索](/ai-tech-notes/rag/retrieval/#エージェント型検索agentic-retrieval)）、検索ツールを持つエージェント |
+
+- **まずは「高度化した RAG」を目標に** するのが現実的です。ハイブリッド ＋ リランク ＋ メタデータで多くの社内 Q&A は十分な精度になります。
+- エージェント型は、複数文書をまたぐ比較・集計など **1 回の検索では答えられない質問** で効果を発揮しますが、
+  LLM 呼び出しが増えるぶん遅く高価になります。評価で効果を確認してから導入します。
+- 文書間の関係をグラフ化する **GraphRAG** のような手法もありますが、索引作成のコストが高く、
+  代表的な OSS 実装も保守モード（新機能の追加なし）に入っています。全体を俯瞰する要約型の質問が中心でない限り、優先度は低めです。
 
 ## LLM はステートレス、という大前提
 
@@ -112,3 +126,10 @@ RAG は「事前にインデックス化した知識を検索」、MCP は「実
 [評価](/ai-tech-notes/rag/evaluation/) → [コンテキストとキャッシュ](/ai-tech-notes/rag/context-and-caching/)
 の順に読むと、構築から運用・コストまで一通り押さえられます。
 :::
+
+## 参考・出典
+
+- [Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval) — Anthropic
+- [Relevance in Azure AI Search](https://learn.microsoft.com/azure/search/search-relevance-overview) — Microsoft Learn
+- [Agentic retrieval in Azure AI Search](https://learn.microsoft.com/azure/search/agentic-retrieval-overview) — Microsoft Learn
+- [GraphRAG](https://microsoft.github.io/graphrag/) — Microsoft Research

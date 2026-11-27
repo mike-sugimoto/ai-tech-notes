@@ -3,6 +3,7 @@ title: データ複製と重複バージョン問題
 description: AI向けにデータを複製したときの重複・版ずれを防ぐ。
 sidebar:
   order: 2
+lastUpdated: 2026-11-27
 ---
 
 「AI に読ませるために、データを別の場所へコピーする」——
@@ -29,10 +30,13 @@ flowchart TB
 | 対策 | 内容 |
 | --- | --- |
 | 参照を基本に | 複製せず元を参照（[データソース](/ai-tech-notes/data-sources/)） |
-| Single Source of Truth | 正本を1つに定める（[バージョン管理](/ai-tech-notes/data-modeling/versioning/)） |
-| 増分同期 | 元の更新/削除を索引へ伝播 |
-| 重複排除 | 内容ハッシュで同一/類似を検出・統合 |
-| 最新版のみ索引 | `version` / `updated_at` で旧版を除外 |
+| そもそも索引を持たない | SharePoint なら Retrieval API、JIRA などは公式 MCP で **元から直接取得** する（[接続手段の選択肢](/ai-tech-notes/data-sources/#接続手段の選択肢2026-年時点)） |
+| Single Source of Truth | 正本を1つに定める |
+| 増分同期 ＋ 削除の伝播 | 元の更新/削除を索引へ伝播（下記） |
+| 重複排除・最新版のみ索引 | ハッシュ・類似度で重複を検出し、公開中の最新版だけを索引に |
+
+正本の決め方・文書の状態管理・重複の検出方法の詳細は [バージョン管理と重複対策](/ai-tech-notes/data-modeling/versioning/) を参照してください。
+このページでは、**索引を元データに追従させ続ける同期の仕組み** を掘り下げます。
 
 ## 同期ジョブと失効ルールの基本パターン
 
@@ -62,6 +66,8 @@ flowchart LR
 | SharePoint | Graph **delta クエリ** | delta の `deleted` ファセット | Graph 変更通知（webhook） | driveItem / list item の ID |
 | Network File Server | 更新日時＋サイズ＋**内容ハッシュ**のマニフェスト比較 | 全列挙の差分（前回有・今回無→削除） | NTFS 変更ジャーナル(USN) / FileSystemWatcher | 内容ハッシュ（パスは不安定） |
 | Confluence | CQL `lastmodified` ＋ `version.number` | 現存ページID と 索引IDの突合 | Confluence **webhook** | content id |
+| JIRA | JQL `updated >= ...`（新しい検索 API で） | 現存課題IDとの突合 | Jira **webhook** | issue id |
+| GitHub | コミット差分（前回同期のコミット以降） | 差分に含まれる削除ファイル | GitHub **webhook**（push） | リポジトリ＋パス（または blob SHA） |
 
 ## ソース別の具体例
 
@@ -101,8 +107,18 @@ flowchart LR
 
 - [ ] AI 用に作ったコピーが更新追従できているか
 - [ ] 元の削除が索引に反映されるか
-- [ ] 同一内容が複数経路で二重に入っていないか
+- [ ] 同一内容が複数経路で二重に入っていないか（例: SharePoint の Copilot 知識と、同じ文書を自前索引にも登録）
+- [ ] 権限の変更（共有の解除など）が索引に反映されるか
 
 :::caution
 やむを得ず複製する場合も、**同期ジョブと失効ルール**を必ずセットで設計してください。
 :::
+
+## 参考・出典
+
+- [Use delta query to track changes in Microsoft Graph data](https://learn.microsoft.com/graph/delta-query-overview) — Microsoft Learn
+- [Microsoft Graph change notifications overview](https://learn.microsoft.com/graph/change-notifications-overview) — Microsoft Learn
+- [Change journals（NTFS USN）](https://learn.microsoft.com/windows/win32/fileio/change-journals) — Microsoft Learn
+- [Advanced searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/) — Atlassian Developer
+- [Confluence webhooks](https://developer.atlassian.com/cloud/confluence/modules/webhook/) — Atlassian Developer
+- [Retrieval API overview](https://learn.microsoft.com/microsoft-365-copilot/extensibility/api-reference/retrieval-api-overview) — Microsoft Learn

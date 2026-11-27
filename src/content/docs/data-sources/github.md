@@ -3,6 +3,7 @@ title: GitHub
 description: コード・PR・Issue の取得と、レビュー支援での活用。
 sidebar:
   order: 5
+lastUpdated: 2026-11-27
 ---
 
 GitHub はコード・PR・Issue・ドキュメント（README/Markdown）の置き場です。
@@ -23,6 +24,15 @@ flowchart LR
     RAG --> EVAL
     EVAL --> COMMENT[指摘 + 根拠]
 ```
+
+## 接続手段
+
+| 方式 | 向くケース | 注意 |
+| --- | --- | --- |
+| **GitHub 公式 MCP サーバ**（リモート / ローカル） | PR・Issue・コードの最新取得、レビューコメント | 必要なツールセットだけを有効化してトークンを抑える |
+| **Copilot コネクタ**（Knowledge / Issues / Pull Requests） | M365 Copilot から開発ドキュメントや Issue を横断検索 | 対象リポジトリと権限の反映範囲を確認 |
+| **GitHub のコードレビュー機能**（Copilot code review など） | PR レビューの自動化 | 基準はリポジトリ内のファイルで管理 → [レビュー支援](/ai-tech-notes/use-cases/review-assist/) |
+| **REST / GraphQL API で自前実装** | 独自の集計・自前索引 | レート制限に注意（認証の種類で上限が異なる） |
 
 ## 注意
 
@@ -68,3 +78,10 @@ GitHub にはファイル/リポジトリのサイズ上限があります（目
 :::note
 上限値は変更されるため、実装前に GitHub の最新ドキュメントで確認してください。
 :::
+
+## 参考・出典
+
+- [GitHub MCP Server](https://github.com/github/github-mcp-server) — GitHub
+- [About large files on GitHub](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github) — GitHub Docs
+- [Rate limits for the REST API](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api) — GitHub Docs
+- [Copilot connectors gallery（Microsoft 提供）](https://learn.microsoft.com/microsoft-365/copilot/connectors/connectors-gallery-microsoft) — Microsoft Learn

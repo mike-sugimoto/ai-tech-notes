@@ -3,6 +3,7 @@ title: RAG の評価
 description: 検索精度と回答品質を分けて計測し、改善サイクルを回す。指標・データセット・運用。
 sidebar:
   order: 4
+lastUpdated: 2026-11-27
 ---
 
 RAG は「検索」と「生成」を **分けて評価** すると改善点が特定しやすくなります。
@@ -40,6 +41,8 @@ flowchart LR
 | 回答の関連性 | 質問にちゃんと答えているか |
 | 出典一致 | 提示した出典が回答内容と整合しているか |
 | 幻覚率 | 根拠に無いことを言っていないか |
+| 回答不可の適切さ | 根拠が無い質問に「分からない」と返せているか（捏造していないか） |
+| 網羅性（completeness） | 正解に含まれる重要な情報を落としていないか |
 
 ## 評価データセットの作り方
 
@@ -56,6 +59,8 @@ flowchart TB
 - まず **20〜50問**程度の小さなセットから始める（無いより圧倒的に良い）
 - 実際の問い合わせログから代表例を選ぶと現実に即する
 - 難問・エッジケース（情報が無い質問など）も入れる
+- **権限のテスト** も入れる（閲覧権限の無いユーザーで質問し、該当文書が出ないこと）
+- 評価セット自体もバージョン管理し、本番で見つかった失敗事例を継続的に追加する
 
 ## LLM-as-a-judge の注意
 
@@ -64,6 +69,22 @@ flowchart TB
 - **採点基準を明文化**する（曖昧な「良い/悪い」では揺れる）
 - 判定モデルのバイアス（長い回答を高評価しがち等）に注意
 - 重要な判定は人手でスポット検証してキャリブレーションする
+- 位置バイアス・冗長性バイアス・自己優遇などの偏りが知られている
+  （詳しくは [レビュー支援 — LLM に評価させるときの注意](/ai-tech-notes/use-cases/review-assist/#llm-に評価させるときの注意)）
+
+## 評価ツール
+
+指標の計算を自前で実装する必要はありません。代表的なツールは次のとおりです。
+
+| ツール | 特徴 | 主な指標 |
+| --- | --- | --- |
+| Ragas（OSS） | RAG 評価の定番ライブラリ。LLM で採点 | faithfulness、context precision / recall、answer relevancy |
+| Microsoft Foundry の評価機能 | Azure 上で RAG 用の評価器を提供。1〜5 段階で採点 | Groundedness、Relevance、Retrieval、Response Completeness |
+| 自前スクリプト | 社内特有の基準（出典 URL の一致など）を測る | 業務に合わせた独自指標 |
+
+- Foundry では RAG アプリ向けに **Retrieval ＋ Groundedness ＋ Relevance（＋コンテンツ安全性）** の組み合わせが推奨されている
+- ツールの指標名は似ていても定義が異なることがあるため、**何を測っているかを定義で確認** してから採用する
+  （例: faithfulness は「回答が渡した文脈と矛盾しないか」を測るもので、文脈自体が正しいかは測らない）
 
 ## 運用: 回帰を防ぐ
 
@@ -98,3 +119,10 @@ flowchart LR
 
 > **Q. 「本番で効いているかは？」**
 > A. オフライン評価に加え、本番の正答フィードバック・解決率などオンライン指標も追います。
+
+## 参考・出典
+
+- [Ragas documentation](https://docs.ragas.io/) — Ragas
+- [RAG evaluators](https://learn.microsoft.com/azure/foundry/concepts/evaluation-evaluators/rag-evaluators) — Microsoft Learn
+- [Built-in evaluators](https://learn.microsoft.com/azure/foundry/concepts/built-in-evaluators) — Microsoft Learn
+- [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena](https://arxiv.org/abs/2306.05685) — Zheng et al., NeurIPS 2023

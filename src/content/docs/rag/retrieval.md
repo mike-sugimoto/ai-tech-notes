@@ -3,6 +3,7 @@ title: 検索とリランキング
 description: ハイブリッド検索・リランキング・クエリ変換・権限フィルタで精度を両立する。
 sidebar:
   order: 3
+lastUpdated: 2026-11-27
 ---
 
 検索段は「**取りこぼさない（再現率）**」と「**ノイズを入れない（適合率）**」の両立が目標です。
@@ -33,6 +34,32 @@ flowchart LR
 - **キーワード検索（BM25等）:** 固有名詞・型番・略語・エラーコードに強い。言い換えには弱い
 - **ハイブリッド:** 両者を併用し、互いの弱点を補う。結果のマージには RRF などの手法が使われる
 
+### RRF（Reciprocal Rank Fusion）によるマージ
+
+ベクトル検索とキーワード検索はスコアの尺度が違うため、単純に足し合わせられません。
+RRF は **スコアではなく順位** を使って統合します。各検索結果での順位を rank として `1 / (rank + k)` を合計し、
+その合計で並べ替えます（k は 60 前後がよく使われる定数）。
+両方の検索で上位に来た文書ほど高くなり、片方だけで上位の文書も拾えるのが特徴です。
+Azure AI Search のハイブリッド検索も、この RRF で結果を統合しています。
+
+### 日本語のキーワード検索は「分かち書き」が要
+
+日本語は単語の間に空白が無いため、キーワード検索には **日本語用のアナライザ（形態素解析）** が必要です。
+既定のアナライザのままだと、文が 1 語として扱われたり、意図しない部分一致が起きたりします。
+
+- Azure AI Search では、日本語フィールドに `ja.microsoft` または `ja.lucene` アナライザを指定する
+  （Microsoft 版は高機能だがインデックス作成が 2〜3 倍遅い。自社データで比較して選ぶ）
+- 社内用語・製品名が誤って分割される場合は、同義語マップやカスタム辞書での補正を検討する
+
+### 埋め込みモデルの選び方
+
+| 観点 | 確認すること |
+| --- | --- |
+| 日本語性能 | 多言語対応モデルか。日本語の評価データで実測する |
+| 次元数・コスト | 次元が大きいほど精度は上がりやすいが、索引サイズと検索コストが増える |
+| 入力長 | 1 チャンクの長さが入力上限に収まるか |
+| 変更のしやすさ | **埋め込みモデルを変えると全文書の再埋め込みが必要**。最初の選定を慎重に |
+
 :::tip
 日本語の社内文書は、製品名・社内用語・略語が多く、**キーワード検索の併用が効きます**。
 ベクトル検索だけだと固有名詞の取りこぼしが起きがちです。
@@ -43,6 +70,7 @@ flowchart LR
 一次検索で広めに取った候補を、より精度の高いモデルで**並べ替え**ます。
 
 - **クロスエンコーダ型リランカ**は、質問と各文書を一緒に評価するため精度が高い
+- マネージドな選択肢として、Azure AI Search の **セマンティックランカー**（上位候補を言語モデルで並べ替え）や、各社のリランク API がある
 - 一次検索（高速・粗い）→ リランク（低速・高精度）→ 上位を厳選、の二段構えが定石
 - リランク後に **LLM へ渡す件数を絞る**ことで、適合率↑・幻覚↓・コスト↓
 
@@ -65,6 +93,28 @@ flowchart LR
 | 会話の文脈解決 | 「それ」「前の件」などの指示語を具体化してから検索 |
 
 注意: これらは LLM 呼び出しを増やすため、**精度向上とコスト/レイテンシのトレードオフ**を評価します。
+
+## エージェント型検索（agentic retrieval）
+
+複雑な質問（「A 製品と B 製品の保守条件の違いは？」など）は、1 回の検索では必要な文書が揃いません。
+**エージェント型検索** は、LLM が質問を分解してサブクエリを作り、並列に検索し、結果を統合・リランクして返します。
+
+```mermaid
+flowchart LR
+    Q[複雑な質問] --> PLAN[LLM が<br/>クエリを計画]
+    PLAN --> S1[サブクエリ 1]
+    PLAN --> S2[サブクエリ 2]
+    PLAN --> S3[サブクエリ 3]
+    S1 --> MERGE[統合・リランク]
+    S2 --> MERGE
+    S3 --> MERGE
+    MERGE --> CTX[根拠セット]
+```
+
+- Azure AI Search では **agentic retrieval**（ナレッジベース機能、一部プレビュー）としてマネージドに提供され、
+  Foundry IQ の土台にもなっている
+- 自前で作る場合は、検索をツールとしてエージェントに持たせ、必要なだけ検索を繰り返させる構成になる
+- **クエリ計画の LLM 呼び出しぶんコストとレイテンシが増える** ため、単純な質問は通常の検索に流す振り分けが有効
 
 ## メタデータフィルタと権限フィルタ
 
@@ -97,6 +147,7 @@ flowchart LR
 
 - 一次検索は広め、リランク後は **絞ってからLLMへ** がコスト最適 → [最適化](/ai-tech-notes/cost-roi/optimization/)
 - 取得文書はクエリ毎に変わるため、**プロンプトキャッシュは効きにくい**点に注意（[コンテキストとキャッシュ](/ai-tech-notes/rag/context-and-caching/)）
+- 権限フィルタの実装方式の比較は [ナレッジ回答 — 権限フィルタの実装](/ai-tech-notes/use-cases/knowledge-qa/#権限フィルタの実装) を参照
 
 ## テックリードが訊いてくる質問
 
@@ -114,3 +165,11 @@ flowchart LR
 
 > **Q. 「検索を変えたら良くなった気がする、を卒業したい」**
 > A. recall@k / precision@k を評価データで計測し、変更前後を比較します（[評価](/ai-tech-notes/rag/evaluation/)）。
+
+## 参考・出典
+
+- [Relevance scoring in hybrid search using Reciprocal Rank Fusion (RRF)](https://learn.microsoft.com/azure/search/hybrid-search-ranking) — Microsoft Learn
+- [Semantic ranking in Azure AI Search](https://learn.microsoft.com/azure/search/semantic-search-overview) — Microsoft Learn
+- [Agentic retrieval in Azure AI Search](https://learn.microsoft.com/azure/search/agentic-retrieval-overview) — Microsoft Learn
+- [Add language analyzers to string fields](https://learn.microsoft.com/azure/search/index-add-language-analyzers) — Microsoft Learn
+- [Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval) — Anthropic

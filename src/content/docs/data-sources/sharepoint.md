@@ -3,6 +3,7 @@ title: SharePoint
 description: 社内ポータル・文書ライブラリの取り込み（Microsoft Graph）。
 sidebar:
   order: 6
+lastUpdated: 2026-11-27
 ---
 
 SharePoint（および OneDrive for Business）は、社内ポータル・文書ライブラリの中心です。
@@ -14,13 +15,31 @@ SharePoint（および OneDrive for Business）は、社内ポータル・文書
 - Office 文書はテキスト抽出 → [Markdown 正規化](/ai-tech-notes/data-modeling/)
 - サイト/ライブラリ単位の権限を尊重（Graph の権限モデル）
 
+## 接続手段
+
+SharePoint は Microsoft 自身が RAG 向けの接続手段を複数用意しており、**自前で索引を作らずに済む** ケースが増えています。
+
 ```mermaid
-flowchart LR
-    SP[(SharePoint)] --> GRAPH[Microsoft Graph API]
-    GRAPH --> MODE{用途}
-    MODE -->|横断検索| RAG[索引化 → RAG]
-    MODE -->|最新文書参照| MCP[MCP / 実行時取得]
+flowchart TB
+    SP[(SharePoint / OneDrive)] --> A[M365 の意味索引<br/>Copilot と共通]
+    A --> R[Retrieval API<br/>自前エージェントから取得]
+    A --> CS[Copilot Studio の<br/>知識ソース]
+    SP --> AIS[Azure AI Search の<br/>SharePoint インデクサー]
+    AIS --> OWN[(自前の索引)]
 ```
+
+| 方式 | 仕組み | 権限 | 向くケース |
+| --- | --- | --- | --- |
+| **Retrieval API** | M365 Copilot と同じ索引から関連テキストを取得 | **問い合わせ時に利用者の権限でトリミング** | 自前エージェントで SharePoint を RAG に使う。索引・権限同期が不要 |
+| **Copilot Studio の知識ソース** | サイト・フォルダを指定してグラウンディング | 利用者の権限が効く | ノーコードでエージェントを作る |
+| **Azure AI Search の SharePoint インデクサー** | ドキュメントライブラリを取り込み自前の索引を作る | ACL の取り込みに対応（プレビュー） | 検索の作り込み、M365 外のデータとの統合 |
+| **Graph API で自前実装** | delta クエリで差分を取得し自前の索引へ | 自前で権限を取得・反映 | 上記で要件を満たせない場合 |
+
+:::tip[まず Retrieval API を検討する]
+自前の索引にコピーすると、SharePoint 側の権限変更が自動では伝わらず、権限同期を自前で作り込む必要があります。
+Retrieval API は問い合わせ時に権限を評価するため、この問題がありません。
+利用には Microsoft 365 Copilot のライセンス、または従量課金（一部プレビュー）が必要です。
+:::
 
 ## 注意
 
@@ -77,3 +96,13 @@ SharePoint Online には複数の上限があり、**大規模ライブラリで
 :::note
 上限値はサービス更新で変わります。実装前に Microsoft の最新公式ドキュメントで必ず確認してください。
 :::
+
+## 参考・出典
+
+- [Retrieval API overview](https://learn.microsoft.com/microsoft-365-copilot/extensibility/api-reference/retrieval-api-overview) — Microsoft Learn
+- [Index data from SharePoint document libraries](https://learn.microsoft.com/azure/search/search-howto-index-sharepoint-online) — Microsoft Learn
+- [SharePoint ACL ingestion with indexers](https://learn.microsoft.com/azure/search/search-indexer-sharepoint-access-control-lists) — Microsoft Learn
+- [Use delta query to track changes in Microsoft Graph data](https://learn.microsoft.com/graph/delta-query-overview) — Microsoft Learn
+- [Microsoft Graph throttling guidance](https://learn.microsoft.com/graph/throttling) — Microsoft Learn
+- [SharePoint limits](https://learn.microsoft.com/office365/servicedescriptions/sharepoint-online-service-description/sharepoint-online-limits) — Microsoft Learn
+- [Add SharePoint as a knowledge source（Copilot Studio）](https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-add-sharepoint) — Microsoft Learn
