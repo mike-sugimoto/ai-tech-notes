@@ -3,6 +3,7 @@ title: データソース概観
 description: 社内ナレッジの所在（Microsoft系中心）と接続戦略。
 sidebar:
   order: 1
+lastUpdated: 2026-11-27
 ---
 
 社内ナレッジは複数のシステムに分散しています。本セクションでは
@@ -13,11 +14,11 @@ sidebar:
 
 | ソース | 主なコンテンツ | 接続方式の例 | 詳細 |
 | --- | --- | --- | --- |
-| Network File Server | Office文書・PDF・図面 | SMB/バッチ取り込み | [File Server](/ai-tech-notes/data-sources/file-server/) |
-| Confluence | Wiki・仕様・手順 | REST API / MCP | [Confluence](/ai-tech-notes/data-sources/confluence/) |
-| JIRA | チケット・要件・履歴 | REST API / MCP | [JIRA](/ai-tech-notes/data-sources/jira/) |
-| GitHub | コード・PR・Issue | API / MCP | [GitHub](/ai-tech-notes/data-sources/github/) |
-| SharePoint | 文書・社内ポータル | Graph API / MCP | [SharePoint](/ai-tech-notes/data-sources/sharepoint/) |
+| Network File Server | Office文書・PDF・図面 | Copilot コネクタ（File Share）/ バッチ取り込み | [File Server](/ai-tech-notes/data-sources/file-server/) |
+| Confluence | Wiki・仕様・手順 | 公式リモート MCP / Copilot コネクタ / REST API | [Confluence](/ai-tech-notes/data-sources/confluence/) |
+| JIRA | チケット・要件・履歴 | 公式リモート MCP / Copilot コネクタ / REST API | [JIRA](/ai-tech-notes/data-sources/jira/) |
+| GitHub | コード・PR・Issue | 公式 MCP サーバ / Copilot コネクタ / API | [GitHub](/ai-tech-notes/data-sources/github/) |
+| SharePoint | 文書・社内ポータル | Retrieval API / Azure AI Search / Graph API | [SharePoint](/ai-tech-notes/data-sources/sharepoint/) |
 
 ## 接続戦略の基本
 
@@ -29,6 +30,31 @@ flowchart LR
     BATCH --> IDX[(インデックス)]
     LIVE --> AGENT[エージェント]
 ```
+
+## 接続手段の選択肢（2026 年時点）
+
+数年前は「各 API を叩いて自前で取り込む」しかありませんでしたが、現在は **既製の接続手段** が揃っています。
+自前実装の前に、次の選択肢で要件を満たせないかを確認します。
+
+| 接続手段 | 仕組み | 権限の扱い | 向くケース |
+| --- | --- | --- | --- |
+| **Copilot コネクタ（Synced）** | 外部データを Microsoft 365 の索引に取り込む | 元システムの ACL を取り込んで反映（コネクタにより差あり） | M365 Copilot / Copilot Studio から横断検索させたい |
+| **Copilot コネクタ（Federated）** | MCP で実行時に取得し、索引化しない | 利用者本人の権限で取得 | 最新性が重要なデータ |
+| **Microsoft 365 Retrieval API** | M365 Copilot と同じ索引から、関連するテキスト断片を取得する API | **問い合わせ時に利用者の権限でトリミング** | 自前のエージェントから SharePoint / OneDrive / コネクタの内容を RAG に使いたい（自前の索引が不要） |
+| **Azure AI Search のインデクサー** | SharePoint・Blob などから定期的に取り込み、自前の索引を作る | ACL の取り込みに対応（一部プレビュー） | 検索の作り込み（チャンク・リランク・評価）を自社で行いたい |
+| **公式リモート MCP サーバ** | ベンダーが提供する MCP サーバで実行時に取得・操作 | 利用者本人として OAuth 認可 | JIRA / Confluence / GitHub の最新状態の参照・操作 |
+| **API で自前実装** | 各サービスの REST API / Graph API から取得 | 自前で ACL を取得・反映する必要がある | 上記で要件を満たせない場合 |
+
+:::tip[自前の索引を作らない選択肢も増えた]
+SharePoint 中心なら、Retrieval API を使うと **データを複製せず、権限も問い合わせ時に効く** 形で RAG を構成できます。
+自前の索引は「検索品質を作り込みたい」「M365 外のデータと統合したい」場合に絞ると、
+[データ複製の問題](/ai-tech-notes/anti-patterns/data-duplication/) と権限同期の負担を避けられます。
+:::
+
+:::caution[Atlassian Data Center の提供終了]
+Atlassian は Jira / Confluence などの Data Center 製品について、**2029 年 3 月 28 日の提供終了（読み取り専用化）** を発表しています。
+オンプレミス版を対象に新たに接続を作る場合は、Cloud 移行の計画と合わせて検討してください。
+:::
 
 ## 横断的に押さえる点
 
@@ -163,3 +189,11 @@ ingest:
 | 失効（元の削除を反映） | 元の削除/更新を検知し、該当 `doc_id` を DB から削除/入れ直し |
 
 各ソースの具体的な推奨形式・アンチパターン・容量の扱いは、それぞれの個別ページにまとめています。
+
+## 参考・出典
+
+- [Microsoft 365 Copilot connectors overview](https://learn.microsoft.com/microsoftsearch/connectors-overview) — Microsoft Learn
+- [Copilot connectors gallery（Microsoft 提供）](https://learn.microsoft.com/microsoft-365/copilot/connectors/connectors-gallery-microsoft) — Microsoft Learn
+- [Retrieval API overview](https://learn.microsoft.com/microsoft-365-copilot/extensibility/api-reference/retrieval-api-overview) — Microsoft Learn
+- [Index data from SharePoint document libraries](https://learn.microsoft.com/azure/search/search-howto-index-sharepoint-online) — Microsoft Learn
+- [Data Center end of life](https://www.atlassian.com/licensing/data-center-end-of-life) — Atlassian
