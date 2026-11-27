@@ -4,11 +4,20 @@ import starlight from '@astrojs/starlight';
 import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
+// Mermaid 図のフォント。Web フォント（Inter / Noto Sans JP）を使うと、フォントの読み込み前に
+// 文字幅が計測されてラベルが切れることがあるため、端末にインストール済みのフォントだけを指定する。
+const DIAGRAM_FONT =
+  "'Segoe UI','Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic UI',Meiryo,system-ui,sans-serif";
+
 export default defineConfig({
   // GitHub Pages: https://mike-sugimoto.github.io/ai-tech-notes/
   site: 'https://mike-sugimoto.github.io',
   base: '/ai-tech-notes',
   trailingSlash: 'always',
+  // 統合・移動したページの旧 URL を新しい場所へ転送する
+  redirects: {
+    '/anti-patterns/mcp-token-waste/': '/ai-tech-notes/mcp/token-cost/',
+  },
   integrations: [
     starlight({
       title: 'AI Tech Notes',
@@ -98,9 +107,9 @@ export default defineConfig({
       autoTheme: false,
       theme: 'base',
       mermaidConfig: {
-        fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
+        fontFamily: DIAGRAM_FONT,
         themeVariables: {
-          fontFamily: "'Inter','Noto Sans JP',system-ui,sans-serif",
+          fontFamily: DIAGRAM_FONT,
           fontSize: '16px',
           background: '#eef5fc',
           // ノード
@@ -138,7 +147,7 @@ export default defineConfig({
           nodeSpacing: 36,
           rankSpacing: 44,
           diagramPadding: 8,
-          wrappingWidth: 240,
+          wrappingWidth: 180,
         },
         er: { useMaxWidth: true },
         sequence: { useMaxWidth: true },

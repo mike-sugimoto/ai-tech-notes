@@ -116,7 +116,7 @@ flowchart TB
 - **判断:** 静的・大量の知識は **RAG**、最新状態・操作が要るものは **MCP** で実行時取得。
 - **背景・理由:** 競合ではなく補完関係。両者を適材適所にすると精度とコストのバランスが取れる。
 - **避けたアンチパターン:** 何でも MCP でリアルタイム取得 → トークン浪費・レイテンシ悪化。
-  → 詳細: [RAG と MCP の使い分け](/ai-tech-notes/mcp/rag-vs-mcp/) / [MCPトークン浪費](/ai-tech-notes/anti-patterns/mcp-token-waste/)
+  → 詳細: [RAG と MCP の使い分け](/ai-tech-notes/mcp/rag-vs-mcp/) / [MCPトークン浪費](/ai-tech-notes/mcp/token-cost/)
 
 ### 5. オーケストレーター（Agent）を中心に置く
 

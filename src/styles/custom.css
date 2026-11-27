@@ -145,11 +145,12 @@
 }
 
 /* 図は自然サイズ（文字 16px）で表示し、本文幅を超える場合だけ縮小する。
-   Mermaid が svg に付ける inline の max-width（=自然幅）を上限として生かす。 */
+   Mermaid が svg に付ける inline の max-width（=自然幅）を上限として生かす。
+   フォントは astro.config.mjs の DIAGRAM_FONT（端末フォント）に任せ、ここでは上書きしない
+   （Web フォントを当てると計測時と描画時で文字幅がずれ、ラベルが切れる）。 */
 .sl-markdown-content pre.mermaid svg {
   width: 100% !important;
   height: auto;
-  font-family: var(--sl-font) !important;
 }
 
 /* --- フローチャート: ノード --- */

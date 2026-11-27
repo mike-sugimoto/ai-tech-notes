@@ -107,7 +107,7 @@ Microsoft Graph の意味索引へ取り込み、Copilot から検索できる�
 - 既存 MCP サーバをリストから選ぶ／ウィザードで新規接続（Server name・URL を入力）
 - **認証:** API key または **OAuth 2.0**
 - 取得できるもの: **Tools（操作）/ Resources（読み取りデータ）/ Prompts（テンプレ）**。
-  不要なツールは個別トグルで OFF（[トークン浪費対策](/ai-tech-notes/anti-patterns/mcp-token-waste/)）
+  不要なツールは個別トグルで OFF（[トークン浪費対策](/ai-tech-notes/mcp/token-cost/)）
 - 参考: [MCP でエージェントを拡張](https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp) /
   [既存 MCP サーバへ接続](https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent) /
   [MCP のツール/リソースを追加](https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-components-to-agent)
