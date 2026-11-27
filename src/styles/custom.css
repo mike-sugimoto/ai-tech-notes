@@ -86,7 +86,9 @@
 }
 
 /* ============================================================
-   Mermaid 図 — Zenn 風のフラットなダイアグラム
+   Mermaid 図 — draw.io 風のシステマティックなダイアグラム
+   - 影・光彩・ドット模様は付けない。角は直角、線は細い実線
+   - 配色は draw.io の標準パレット（処理=青、判断=黄、データ=緑、グループ=灰）
    - ライト/ダークで配色を切り替える（図は1回だけ描画し、色は CSS 変数で上書き）
    - astro-mermaid が注入する既定スタイル（pre.mermaid[data-processed] 等）や
      Mermaid が SVG 内に埋め込む #id 付きスタイルより優先させるため、
@@ -94,52 +96,51 @@
    ============================================================ */
 :root {
   /* ダーク（既定） */
-  --dg-canvas: #0f1e34;
-  --dg-canvas-border: #1e304a;
-  --dg-dot: rgba(148, 178, 214, 0.08);
-  --dg-node-bg: #142843;
-  --dg-node-border: #2d4b72;
-  --dg-node-text: #e6eef8;
-  --dg-accent: #4dabf7;
-  --dg-accent-bg: #133559;
-  --dg-cluster-bg: rgba(77, 171, 247, 0.06);
-  --dg-cluster-border: #27456b;
-  --dg-cluster-text: #7cc4ff;
-  --dg-edge: #6f87a8;
-  --dg-edge-label-bg: #1a2e4b;
-  --dg-edge-label-text: #b0c1d6;
-  --dg-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --dg-canvas: #0f1722;
+  --dg-canvas-border: #2a3646;
+  --dg-node-bg: #1d3049;
+  --dg-node-border: #7ea6d8;
+  --dg-node-text: #e8eef5;
+  --dg-decision-bg: #3a3320;
+  --dg-decision-border: #d6b656;
+  --dg-store-bg: #1e3626;
+  --dg-store-border: #82b366;
+  --dg-cluster-bg: #151e2a;
+  --dg-cluster-border: #8a96a6;
+  --dg-cluster-text: #e8eef5;
+  --dg-edge: #b3bfcc;
+  --dg-edge-label-bg: #0f1722;
+  --dg-edge-label-text: #d0d8e2;
 }
 :root[data-theme='light'] {
-  --dg-canvas: #f7fafd;
-  --dg-canvas-border: #e1eaf4;
-  --dg-dot: rgba(62, 112, 168, 0.07);
-  --dg-node-bg: #ffffff;
-  --dg-node-border: #c9d9ec;
-  --dg-node-text: #1c2b42;
-  --dg-accent: #3ea8ff;
-  --dg-accent-bg: #e8f4ff;
-  --dg-cluster-bg: rgba(62, 168, 255, 0.05);
-  --dg-cluster-border: #cfe2f6;
-  --dg-cluster-text: #0b6fda;
-  --dg-edge: #93a6bf;
+  --dg-canvas: #ffffff;
+  --dg-canvas-border: #d0d7de;
+  --dg-node-bg: #dae8fc;
+  --dg-node-border: #6c8ebf;
+  --dg-node-text: #1a1a1a;
+  --dg-decision-bg: #fff2cc;
+  --dg-decision-border: #d6b656;
+  --dg-store-bg: #d5e8d4;
+  --dg-store-border: #82b366;
+  --dg-cluster-bg: #f5f5f5;
+  --dg-cluster-border: #666666;
+  --dg-cluster-text: #333333;
+  --dg-edge: #333333;
   --dg-edge-label-bg: #ffffff;
-  --dg-edge-label-text: #4a5f7e;
-  --dg-shadow: 0 1px 2px rgba(15, 40, 80, 0.08);
+  --dg-edge-label-text: #333333;
 }
 
-/* キャンバス（カード） */
+/* キャンバス: 無地・細い枠 */
 .sl-markdown-content pre.mermaid,
 .sl-markdown-content pre.mermaid[data-processed] {
   display: flex;
   justify-content: center;
   margin-block: 1.75rem !important;
-  padding: 1.75rem 1.25rem !important;
-  background-color: var(--dg-canvas) !important;
-  background-image: radial-gradient(var(--dg-dot) 1px, transparent 1px) !important;
-  background-size: 16px 16px !important;
+  padding: 1.5rem 1.25rem !important;
+  background: var(--dg-canvas) !important;
   border: 1px solid var(--dg-canvas-border) !important;
-  border-radius: 0.75rem !important;
+  border-radius: 0.25rem !important;
+  box-shadow: none !important;
   overflow-x: auto;
   line-height: 1.4;
 }
@@ -152,8 +153,12 @@
   width: 100% !important;
   height: auto;
 }
+/* 図中のあらゆる影・フィルタを無効化 */
+.sl-markdown-content pre.mermaid svg * {
+  filter: none !important;
+}
 
-/* --- フローチャート: ノード --- */
+/* --- フローチャート: ノード（処理 = 青の四角） --- */
 .sl-markdown-content pre.mermaid .node rect,
 .sl-markdown-content pre.mermaid .node polygon,
 .sl-markdown-content pre.mermaid .node circle,
@@ -161,17 +166,21 @@
 .sl-markdown-content pre.mermaid .node path {
   fill: var(--dg-node-bg) !important;
   stroke: var(--dg-node-border) !important;
-  stroke-width: 1.25px !important;
-  filter: drop-shadow(var(--dg-shadow));
+  stroke-width: 1px !important;
 }
 .sl-markdown-content pre.mermaid .node rect {
-  rx: 8px;
-  ry: 8px;
+  rx: 0;
+  ry: 0;
 }
-/* データストア（円柱 [( )]）はアクセント色で区別 */
+/* 判断（菱形 { }）= 黄 */
+.sl-markdown-content pre.mermaid .node polygon {
+  fill: var(--dg-decision-bg) !important;
+  stroke: var(--dg-decision-border) !important;
+}
+/* データストア（円柱 [( )]）= 緑 */
 .sl-markdown-content pre.mermaid .node path.outer-path[d*=' a'] {
-  fill: var(--dg-accent-bg) !important;
-  stroke: var(--dg-accent) !important;
+  fill: var(--dg-store-bg) !important;
+  stroke: var(--dg-store-border) !important;
 }
 .sl-markdown-content pre.mermaid .node .label,
 .sl-markdown-content pre.mermaid .node .nodeLabel,
@@ -181,14 +190,14 @@
   fill: var(--dg-node-text) !important;
 }
 
-/* --- サブグラフ --- */
+/* --- サブグラフ（グループ = 灰色の実線枠） --- */
 .sl-markdown-content pre.mermaid .cluster rect {
   fill: var(--dg-cluster-bg) !important;
   stroke: var(--dg-cluster-border) !important;
   stroke-width: 1px !important;
-  stroke-dasharray: 5 4;
-  rx: 10px;
-  ry: 10px;
+  stroke-dasharray: none !important;
+  rx: 0;
+  ry: 0;
 }
 .sl-markdown-content pre.mermaid .cluster-label,
 .sl-markdown-content pre.mermaid .cluster-label span,
@@ -199,19 +208,19 @@
   font-weight: 600;
 }
 
-/* --- エッジ（線・矢印） --- */
+/* --- エッジ（直交配線・細い実線） --- */
 .sl-markdown-content pre.mermaid .flowchart-link,
 .sl-markdown-content pre.mermaid .edgePath .path,
 .sl-markdown-content pre.mermaid .edge-thickness-normal {
   stroke: var(--dg-edge) !important;
-  stroke-width: 1.5px !important;
+  stroke-width: 1.25px !important;
 }
 .sl-markdown-content pre.mermaid .marker,
 .sl-markdown-content pre.mermaid marker path {
   fill: var(--dg-edge) !important;
   stroke: var(--dg-edge) !important;
 }
-/* エッジラベル: 小さなピル型 */
+/* エッジラベル: 背景で線を切る（draw.io の線上ラベルと同じ見た目） */
 .sl-markdown-content pre.mermaid .edgeLabel,
 .sl-markdown-content pre.mermaid .edgeLabel p,
 .sl-markdown-content pre.mermaid .edgeLabel span,
@@ -219,14 +228,11 @@
   background-color: var(--dg-edge-label-bg) !important;
   color: var(--dg-edge-label-text) !important;
   fill: var(--dg-edge-label-text) !important;
+  border-radius: 0 !important;
 }
 .sl-markdown-content pre.mermaid .edgeLabel rect {
   fill: var(--dg-edge-label-bg) !important;
   opacity: 1 !important;
-}
-.sl-markdown-content pre.mermaid .edgeLabel p,
-.sl-markdown-content pre.mermaid .labelBkg {
-  border-radius: 4px;
 }
 
 /* --- マインドマップ --- */
@@ -236,7 +242,7 @@
 .sl-markdown-content pre.mermaid .mindmap-node polygon {
   fill: var(--dg-node-bg) !important;
   stroke: var(--dg-node-border) !important;
-  stroke-width: 1.25px !important;
+  stroke-width: 1px !important;
 }
 .sl-markdown-content pre.mermaid .mindmap-node.section-root rect,
 .sl-markdown-content pre.mermaid .mindmap-node.section-root path,
@@ -244,8 +250,8 @@
 .sl-markdown-content pre.mermaid .mindmap-node.section--1 rect,
 .sl-markdown-content pre.mermaid .mindmap-node.section--1 path,
 .sl-markdown-content pre.mermaid .mindmap-node.section--1 circle {
-  fill: var(--dg-accent-bg) !important;
-  stroke: var(--dg-accent) !important;
+  fill: var(--dg-decision-bg) !important;
+  stroke: var(--dg-decision-border) !important;
 }
 .sl-markdown-content pre.mermaid .mindmap-node text,
 .sl-markdown-content pre.mermaid .mindmap-node span,
@@ -253,13 +259,14 @@
   color: var(--dg-node-text) !important;
   fill: var(--dg-node-text) !important;
 }
+/* ノード下の装飾線は描かない（枠線だけにする） */
 .sl-markdown-content pre.mermaid .mindmap-node line {
-  stroke: var(--dg-accent) !important;
+  display: none;
 }
 .sl-markdown-content pre.mermaid .mindmap-edges path,
 .sl-markdown-content pre.mermaid path.edge {
   stroke: var(--dg-edge) !important;
-  stroke-width: 1.5px !important;
+  stroke-width: 1.25px !important;
 }
 
 /* ============================================================
@@ -315,34 +322,6 @@
   --sl-color-asides-text-accent: #9a2e18;
   --sl-color-asides-border: #cf6a50;
   background-color: #f8e5df;
-}
-
-/* ============================================================
-   ページ送り（前へ / 次へ）をモダンでコンパクトに
-   ============================================================ */
-.pagination-links a {
-  padding: 0.7rem 0.95rem;
-  gap: 0.55rem;
-  border: 1px solid var(--sl-color-hairline-shade);
-  border-radius: 0.6rem;
-  box-shadow: none;
-  color: var(--sl-color-gray-3);
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-.pagination-links a:hover {
-  border-color: var(--sl-color-accent);
-  background: var(--sl-color-gray-6);
-}
-.pagination-links .link-title {
-  color: var(--sl-color-white);
-  font-size: var(--sl-text-base);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-/* 矢印アイコンをアクセント色＆適切なサイズに */
-.pagination-links svg {
-  color: var(--sl-color-accent);
-  font-size: 1.1rem;
 }
 
 /* ============================================================

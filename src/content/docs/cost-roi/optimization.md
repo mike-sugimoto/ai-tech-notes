@@ -232,6 +232,10 @@ flowchart TD
 ## まとめ
 
 ```mermaid
+---
+config:
+  layout: cose-bilkent
+---
 mindmap
   root((コスト最適化))
     品質を落とさない
