@@ -138,7 +138,7 @@ export default defineConfig({
           nodeSpacing: 36,
           rankSpacing: 44,
           diagramPadding: 8,
-          wrappingWidth: 180,
+          wrappingWidth: 240,
         },
         er: { useMaxWidth: true },
         sequence: { useMaxWidth: true },
