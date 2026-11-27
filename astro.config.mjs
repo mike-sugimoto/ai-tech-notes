@@ -83,6 +83,10 @@ export default defineConfig({
           items: [{ autogenerate: { directory: 'mcp' } }],
         },
         {
+          label: 'エージェント開発',
+          items: [{ autogenerate: { directory: 'agents' } }],
+        },
+        {
           label: 'データソース',
           items: [{ autogenerate: { directory: 'data-sources' } }],
         },
