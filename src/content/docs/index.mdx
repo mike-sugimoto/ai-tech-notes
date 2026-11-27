@@ -30,6 +30,9 @@ RAG・MCP・データの蓄積場所（Microsoft 系中心）・データ形式�
 
 | 更新日 | 更新したページ | 内容 |
 | --- | --- | --- |
+| 2026-11-28 | [ハーネス設計](/ai-tech-notes/agents/harness/) | ハーネスの構成要素、Anthropic の 3 つのパターン、長時間タスクのハーネス（初期化エージェント＋進捗ファイル）、Claude Code での対応表 |
+| 2026-11-28 | [Skills](/ai-tech-notes/agents/skills/) | 必要なときだけ読み込まれる手順書の仕組み、`SKILL.md` の書き方、呼び出し方の制御、`CLAUDE.md`・MCP との使い分け |
+| 2026-11-28 | [サブエージェント](/ai-tech-notes/agents/subagents/) | 別の文脈で作業して結果だけ返す仕組み、定義ファイルの書き方、エージェントチームとの違い |
 | 2026-11-28 | [エージェント開発（新章）](/ai-tech-notes/agents/) | 仕様駆動開発・ループエンジニアリング・ハーネス設計の関係を整理した新章を追加 |
 | 2026-11-28 | [ループエンジニアリング](/ai-tech-notes/agents/loop-engineering/) | ゴール・判定シグナル・停止条件の設計と、Claude Code の `/goal`・`/loop`・Stop フック・`/schedule` の使い分け |
 | 2026-11-28 | [仕様駆動開発（SDD）](/ai-tech-notes/agents/spec-driven/) | 仕様 → 計画 → タスク → 実装の流れと、Spec Kit・Kiro・BMAD-METHOD・OpenSpec・cc-sdd・Superpowers・Agent OS の比較と選び方 |
@@ -51,7 +54,7 @@ RAG・MCP・データの蓄積場所（Microsoft 系中心）・データ形式�
     [読む →](/ai-tech-notes/mcp/)
   </Card>
   <Card title="エージェント開発" icon="random">
-    仕様駆動開発・ループエンジニアリング・ハーネス設計で、エージェントに仕事を任せる。
+    仕様駆動開発・ループエンジニアリング・ハーネス設計・Skills・サブエージェントで、エージェントに仕事を任せる。
     [読む →](/ai-tech-notes/agents/)
   </Card>
   <Card title="データソース（MS中心）" icon="seti:folder">
