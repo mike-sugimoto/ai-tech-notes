@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.43.2",
+    "@mermaid-js/layout-elk": "1.0.2",
     "astro": "^7.4.13",
     "astro-mermaid": "^2.2.0",
     "sharp": "^0.35.1"

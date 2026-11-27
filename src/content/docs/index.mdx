@@ -26,11 +26,18 @@ RAG・MCP・データの蓄積場所（Microsoft 系中心）・データ形式�
 
 **想定読者:** AI システムアーキテクト / IT 部門 / 開発者
 
+## What's new
+
+| 更新日 | 更新したページ | 内容 |
+| --- | --- | --- |
+| 2026-11-28 | [エージェント開発（新章）](/ai-tech-notes/agents/) | 仕様駆動開発・ループエンジニアリング・ハーネス設計の関係を整理した新章を追加 |
+| 2026-11-28 | [ループエンジニアリング](/ai-tech-notes/agents/loop-engineering/) | ゴール・判定シグナル・停止条件の設計と、Claude Code の `/goal`・`/loop`・Stop フック・`/schedule` の使い分け |
+| 2026-11-28 | [仕様駆動開発（SDD）](/ai-tech-notes/agents/spec-driven/) | 仕様 → 計画 → タスク → 実装の流れと、Spec Kit・Kiro・BMAD-METHOD・OpenSpec・cc-sdd・Superpowers・Agent OS の比較と選び方 |
+| 2026-11-28 | [エージェントメモリと RAG](/ai-tech-notes/rag/agent-memory/) | エージェントが読み書きするファイル型メモリ（Claude Managed Agents）の仕組みと、RAG との使い分け |
+| 2026-11-27 | [コスト・ROI](/ai-tech-notes/cost-roi/) | 最新の料金で試算を更新し、[ROI の測り方](/ai-tech-notes/cost-roi/roi/) を追加 |
+| 2026-11-27 | 全章 | 2026 年時点の情報（モデル・MCP 仕様・検索手法・データソース接続）に合わせて全面改訂 |
+
 <CardGrid stagger>
-  <Card title="ユースケース" icon="rocket">
-    回答・ドラフト・レビューの代表的ユースケースと、推奨アーキテクチャ。
-    [読む →](/ai-tech-notes/use-cases/)
-  </Card>
   <Card title="LLM の基礎" icon="open-book">
     トークン・コンテキストウィンドウ・モデル選定など、使い方と選定の土台。
     [読む →](/ai-tech-notes/llm-basics/)
@@ -42,6 +49,10 @@ RAG・MCP・データの蓄積場所（Microsoft 系中心）・データ形式�
   <Card title="MCP 活用" icon="seti:config">
     MCP の役割、サーバ構成、トークン消費問題への対策、RAG との使い分け。
     [読む →](/ai-tech-notes/mcp/)
+  </Card>
+  <Card title="エージェント開発" icon="random">
+    仕様駆動開発・ループエンジニアリング・ハーネス設計で、エージェントに仕事を任せる。
+    [読む →](/ai-tech-notes/agents/)
   </Card>
   <Card title="データソース（MS中心）" icon="seti:folder">
     File Server / Confluence / JIRA / GitHub / SharePoint への接続戦略。
@@ -58,5 +69,9 @@ RAG・MCP・データの蓄積場所（Microsoft 系中心）・データ形式�
   <Card title="コスト・ROI" icon="approve-check">
     コスト構造と試算、最適化の順番、コスト視点のシステム選定、ROI の測り方。
     [読む →](/ai-tech-notes/cost-roi/)
+  </Card>
+  <Card title="ユースケース" icon="rocket">
+    回答・ドラフト・レビューの代表的ユースケースと、推奨アーキテクチャ。
+    [読む →](/ai-tech-notes/use-cases/)
   </Card>
 </CardGrid>

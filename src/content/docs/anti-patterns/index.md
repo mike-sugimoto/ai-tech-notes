@@ -12,6 +12,10 @@ lastUpdated: 2026-11-27
 ## よくある失敗の地図
 
 ```mermaid
+---
+config:
+  layout: cose-bilkent
+---
 mindmap
   root((アンチパターン))
     データ

@@ -2,6 +2,7 @@
 title: バージョン管理と重複対策
 description: 最新版を一意に定め、古い版・複製を索引から除外する。状態管理・重複検出・削除の伝播。
 sidebar:
+  label: バージョン管理
   order: 4
 lastUpdated: 2026-11-27
 ---

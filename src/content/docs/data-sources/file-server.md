@@ -2,6 +2,7 @@
 title: Network File Server
 description: 共有ファイルサーバ上のOffice文書・PDFの取り込み。
 sidebar:
+  label: File Server
   order: 2
 lastUpdated: 2026-11-27
 ---

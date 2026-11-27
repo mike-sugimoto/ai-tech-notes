@@ -2,6 +2,7 @@
 title: コンテキストとキャッシュ
 description: RAG のコンテキストをどう組み立てるか、プロンプトキャッシュで何が変わるか。順序・経済性・モデルごとの差。
 sidebar:
+  label: 文脈とキャッシュ
   order: 5
 lastUpdated: 2026-11-27
 ---

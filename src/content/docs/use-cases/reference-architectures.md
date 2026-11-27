@@ -2,6 +2,7 @@
 title: ユースケース別 推奨アーキテクチャ
 description: 回答・ドラフト・レビューそれぞれに向く構成と、その選定理由・既製品との使い分け。
 sidebar:
+  label: 推奨アーキテクチャ
   order: 5
 lastUpdated: 2026-11-27
 ---

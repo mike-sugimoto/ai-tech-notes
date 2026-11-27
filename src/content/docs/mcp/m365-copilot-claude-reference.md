@@ -2,6 +2,7 @@
 title: 参考アーキテクチャ — M365 Copilot × Claude（RAG / MCP 接続）
 description: Microsoft 365 Copilot / Copilot Studio で Claude を使い、社内データに RAG と MCP で接続する具体的な構成例。
 sidebar:
+  label: 参考アーキテクチャ M365
   order: 5
 lastUpdated: 2026-11-27
 ---

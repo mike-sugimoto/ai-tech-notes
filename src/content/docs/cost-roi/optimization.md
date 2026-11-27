@@ -2,6 +2,7 @@
 title: コスト最適化テクニック
 description: 精度を保ちつつコストを下げる実践策。品質を落とさない施策（キャッシュ・入力削減・バッチ）から、トレードオフのある施策（effort・モデル切り替え）の順に。
 sidebar:
+  label: コスト最適化
   order: 3
 lastUpdated: 2026-11-27
 ---
@@ -232,6 +233,10 @@ flowchart TD
 ## まとめ
 
 ```mermaid
+---
+config:
+  layout: cose-bilkent
+---
 mindmap
   root((コスト最適化))
     品質を落とさない
