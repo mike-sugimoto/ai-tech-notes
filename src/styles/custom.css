@@ -360,3 +360,154 @@
     min-width: 0;
   }
 }
+
+/* ============================================================
+   ページタイトルの背景 — 電子回路風
+   - 細いグリッド（右から左へフェード）と、右端から伸びる基板配線
+   - 配線は SVG をマスクに使い、色は CSS 変数で切り替える（ライト/ダーク対応）
+   - 各ページ先頭の .content-panel（h1 を含む）に適用する。トップページはヒーロー部分に適用する
+   ============================================================ */
+:root {
+  --tb-bg: linear-gradient(180deg, #0f2038 0%, #0b1626 100%);
+  --tb-glow: rgba(77, 171, 247, 0.16);
+  --tb-grid: rgba(125, 175, 230, 0.07);
+  --tb-trace: rgba(77, 171, 247, 0.32);
+}
+:root[data-theme='light'] {
+  --tb-bg: linear-gradient(180deg, #f2f7fd 0%, #ffffff 100%);
+  --tb-glow: rgba(11, 111, 218, 0.08);
+  --tb-grid: rgba(11, 111, 218, 0.06);
+  --tb-trace: rgba(11, 111, 218, 0.16);
+}
+
+main > .content-panel:first-child:not(:has(.hero)),
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 140% at 100% 0%, var(--tb-glow), transparent 70%),
+    var(--tb-bg);
+  border-bottom: 1px solid var(--sl-color-hairline-shade);
+}
+main > .content-panel:first-child:not(:has(.hero))::before,
+main > .content-panel:first-child:not(:has(.hero))::after,
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+/* グリッド */
+main > .content-panel:first-child:not(:has(.hero))::before,
+.hero::before {
+  background:
+    linear-gradient(var(--tb-grid) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, var(--tb-grid) 1px, transparent 1px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 75%);
+  mask-image: linear-gradient(to left, #000 0%, transparent 75%);
+}
+/* 基板配線（右端から伸び、左へ行くほど薄くなる） */
+main > .content-panel:first-child:not(:has(.hero))::after,
+.hero::after {
+  left: auto;
+  width: min(420px, 60%);
+  background: var(--tb-trace);
+  --tb-circuit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120' preserveAspectRatio='xMaxYMid slice'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.4'%3E%3Cpath d='M320 18H252L238 32H168'/%3E%3Cpath d='M320 46H272L260 58H206'/%3E%3Cpath d='M320 74H238L220 92H146'/%3E%3Cpath d='M320 104H262'/%3E%3Cpath d='M300 0V10L290 20'/%3E%3Cpath d='M296 120V112L286 104'/%3E%3Ccircle cx='165' cy='32' r='3'/%3E%3Ccircle cx='203' cy='58' r='3'/%3E%3Ccircle cx='143' cy='92' r='3'/%3E%3Ccircle cx='259' cy='104' r='3'/%3E%3Crect x='226' y='66' width='12' height='16'/%3E%3C/g%3E%3Cg fill='%23000'%3E%3Crect x='250' y='42' width='4' height='4'/%3E%3Crect x='282' y='70' width='4' height='4'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask: var(--tb-circuit) right center / 320px 120px no-repeat,
+    linear-gradient(to left, #000 30%, transparent);
+  -webkit-mask-composite: source-in;
+  mask: var(--tb-circuit) right center / 320px 120px no-repeat intersect,
+    linear-gradient(to left, #000 30%, transparent);
+}
+/* トップページはヒーローと本文が同じパネルに入るため、ヒーロー部分だけを枠で囲む。
+   枠は計器パネル風: 半透明の細い枠線 + 四隅の L 字ブラケット + 上辺中央の光るライン */
+:root {
+  --hb-frame: rgba(77, 171, 247, 0.18);
+  --hb-corner: rgba(77, 171, 247, 0.75);
+  --hb-line: rgba(77, 171, 247, 0.6);
+}
+:root[data-theme='light'] {
+  --hb-frame: rgba(11, 111, 218, 0.16);
+  --hb-corner: rgba(11, 111, 218, 0.6);
+  --hb-line: rgba(11, 111, 218, 0.45);
+}
+/* 四隅の L 字ブラケット（枠線の上に重ねるため border-box 基準）。
+   --hb-corner をこの要素で解決させるため、:root ではなく使う要素側で定義する */
+.hero,
+.card {
+  /* 四隅は強調しない（枠線と同じ控えめな色。形だけをうっすら残す） */
+  --hb-corner: var(--hb-frame);
+  --hb-brackets:
+    linear-gradient(var(--hb-corner), var(--hb-corner)) left top / var(--hb-len) var(--hb-w) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) left top / var(--hb-w) var(--hb-len) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) right top / var(--hb-len) var(--hb-w) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) right top / var(--hb-w) var(--hb-len) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) left bottom / var(--hb-len) var(--hb-w) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) left bottom / var(--hb-w) var(--hb-len) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) right bottom / var(--hb-len) var(--hb-w) no-repeat border-box,
+    linear-gradient(var(--hb-corner), var(--hb-corner)) right bottom / var(--hb-w) var(--hb-len) no-repeat border-box;
+}
+.hero {
+  --hb-len: 22px; /* ブラケットの腕の長さ */
+  --hb-w: 2px; /* ブラケットの太さ */
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  border: 1px solid var(--hb-frame);
+  border-radius: 2px;
+  background:
+    var(--hb-brackets),
+    /* 上辺中央の光るライン（両端へフェード） */
+    linear-gradient(90deg, transparent, var(--hb-line), transparent) center top / 60% 1px no-repeat border-box,
+    radial-gradient(ellipse 55% 140% at 100% 0%, var(--tb-glow), transparent 70%),
+    var(--tb-bg);
+}
+
+/* ============================================================
+   トップページの章カード（Starlight の Card）— ヒーローと同じ計器パネル風
+   - 章ごとの橙/緑/紫/赤の色分けをやめ、サイトの青で統一
+   - 半透明の枠 + 四隅ブラケット + 上辺のライン。ホバーで枠とブラケットが明るくなる
+   - アイコンはロゴと同じ半透明の青いタイル
+   ============================================================ */
+.card {
+  --hb-len: 12px;
+  --hb-w: 1.5px;
+  --sl-card-border: var(--hb-frame);
+  --sl-card-bg: transparent;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--hb-frame) !important;
+  border-radius: 2px;
+  background:
+    var(--hb-brackets),
+    linear-gradient(90deg, var(--hb-line), transparent 55%) left top / 100% 1px no-repeat border-box,
+    radial-gradient(ellipse 80% 90% at 100% 0%, var(--tb-glow), transparent 70%),
+    var(--tb-bg) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  --hb-corner: var(--sl-color-accent);
+  border-color: var(--hb-corner) !important;
+  box-shadow: 0 0 0 1px var(--hb-frame), 0 8px 24px -12px var(--hb-line);
+}
+.card .icon {
+  color: var(--sl-color-accent);
+  background-color: color-mix(in srgb, var(--sl-color-accent) 12%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 45%, transparent) !important;
+  border-radius: 4px;
+}
+/* カードにもヒーローと同じ薄い格子（右上から左下へフェード） */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--tb-grid) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, var(--tb-grid) 1px, transparent 1px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(225deg, #000 0%, transparent 85%);
+  mask-image: linear-gradient(225deg, #000 0%, transparent 85%);
+}

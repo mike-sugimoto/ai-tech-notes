@@ -1,14 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="AI Tech Notes">
-  <defs>
-    <linearGradient id="atn-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3ea8ff"/>
-      <stop offset="1" stop-color="#0b5fc4"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="url(#atn-bg)"/>
-  <g fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M10.5 10 L5.5 16 L10.5 22"/>
-    <path d="M21.5 10 L26.5 16 L21.5 22"/>
+  <!-- サイトの濃青に合わせた半透明のタイル。ライト/ダーク両方の背景に馴染む中間の青を使う -->
+  <rect x="1" y="1" width="30" height="30" rx="6" fill="#4a9be0" fill-opacity="0.14" stroke="#4a9be0" stroke-opacity="0.55" stroke-width="1.5"/>
+  <g fill="none" stroke="#4a9be0" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M11 10.5 L6.5 16 L11 21.5"/>
+    <path d="M21 10.5 L25.5 16 L21 21.5"/>
   </g>
-  <path fill="#ffffff" d="M16 11.2 C16.5 14.3 17.7 15.5 20.8 16 C17.7 16.5 16.5 17.7 16 20.8 C15.5 17.7 14.3 16.5 11.2 16 C14.3 15.5 15.5 14.3 16 11.2 Z"/>
+  <rect x="14" y="14" width="4" height="4" fill="#4a9be0"/>
 </svg>
