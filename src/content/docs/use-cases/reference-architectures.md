@@ -105,7 +105,7 @@ flowchart TB
 - **判断:** AI 用にデータを別の場所へ**コピーしない**。元を参照し、索引には最新版のみを置く。
 - **背景・理由:** 複製は必ず**版ずれ**を生み、古い情報での回答や矛盾を招く。
 - **避けたアンチパターン:** 「AI 用データレイク」に全コピー → 重複・失効・どれが正本か不明。
-  → 詳細: [データ複製と重複バージョン問題](/ai-tech-notes/anti-patterns/data-duplication/) / [バージョン管理](/ai-tech-notes/data-modeling/versioning/)
+  → 詳細: [バージョン管理と重複対策](/ai-tech-notes/data-modeling/versioning/)
 
 ### 3. 検索はハイブリッド ＋ リランクの二段
 
@@ -247,7 +247,7 @@ flowchart LR
 | レビュー（文書） | — （既製品は少ない） | 規程・設計書など、基準が社内固有の文書全般 |
 
 → 比較の観点は [システム選定（コスト視点）](/ai-tech-notes/cost-roi/system-selection/) と
-[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/mcp/m365-copilot-claude-reference/) も参照してください。
+[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/use-cases/m365-copilot-claude-reference/) も参照してください。
 
 ## 規模別の構成バリエーション
 

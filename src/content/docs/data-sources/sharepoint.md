@@ -44,7 +44,7 @@ Retrieval API は問い合わせ時に権限を評価するため、この問題
 ## 注意
 
 - 大規模テナントでは **増分同期（delta クエリ）** が必須
-- バージョン履歴があるため **最新版のみ索引**（[重複対策](/ai-tech-notes/anti-patterns/data-duplication/)）
+- バージョン履歴があるため **最新版のみ索引**（[重複対策](/ai-tech-notes/data-modeling/versioning/)）
 - スロットリング（レート制限）に注意
 
 ## おすすめのデータ形式

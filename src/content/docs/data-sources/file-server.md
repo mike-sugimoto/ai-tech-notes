@@ -25,7 +25,7 @@ flowchart LR
 
 - **抽出品質がすべて:** スキャンPDFはOCRが必要。表・図は欠落しやすい
 - **メタデータが薄い:** フォルダ構成・更新日・所有者を補助メタデータに使う
-- **重複の温床:** `最終_v2_本当に最終.docx` 問題 → [重複対策](/ai-tech-notes/anti-patterns/data-duplication/)
+- **重複の温床:** `最終_v2_本当に最終.docx` 問題 → [重複対策](/ai-tech-notes/data-modeling/versioning/)
 - **権限:** NTFS/共有権限をインデックスのアクセス制御に反映
 
 ## 接続手段
@@ -39,7 +39,7 @@ flowchart LR
 :::caution[ファイルをクラウドへ「コピー」して索引化しない]
 索引化のためだけにファイルサーバの内容を Blob ストレージなどへコピーすると、
 元とコピーの **二重管理（版ずれ）** が始まります。コピーするなら「移行」として元を廃止するか、元を直接読む手段を選びます。
-→ [データ複製と重複バージョン問題](/ai-tech-notes/anti-patterns/data-duplication/)
+→ [バージョン管理と重複対策](/ai-tech-notes/data-modeling/versioning/)
 :::
 
 ## 推奨
@@ -66,7 +66,7 @@ flowchart LR
 
 | アンチパターン | なぜダメか | 対策 |
 | --- | --- | --- |
-| `最終_v2_本当に最終.docx` | 重複版が索引に乱立し古い情報で回答 | 正本を1つに（[重複対策](/ai-tech-notes/anti-patterns/data-duplication/)） |
+| `最終_v2_本当に最終.docx` | 重複版が索引に乱立し古い情報で回答 | 正本を1つに（[重複対策](/ai-tech-notes/data-modeling/versioning/)） |
 | Excel「方眼紙」・結合セル | 表が壊れ CSV 化できない | レイアウト用途をやめ、データ表に整形 |
 | スキャンPDF（画像のみ） | テキストが無く検索不能 | OCR、可能なら原本を MD 化 |
 | パスワード付き・独自バイナリ | テキスト抽出ができない | 解除・標準形式へ変換してから取り込む |

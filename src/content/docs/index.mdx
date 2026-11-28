@@ -1,12 +1,12 @@
 ---
 title: AI Tech Notes
-description: 高精度なAIナレッジ・システム（RAG / MCP / データ設計 / コスト）を構築するための包括的な設計ノート。
+description: 若手エンジニアが LLM の基礎から RAG・MCP・エージェント開発までを順に学び、社内ナレッジ AI の構成を理解するための学習ノート。
 template: doc
 hero:
-  tagline: AIによるナレッジ回答・ドラフト作成・レビューシステムを、高精度かつ低コストで構築するための設計ノート。
+  tagline: LLM の仕組みから RAG・MCP・エージェント開発まで、若手エンジニアが順番に学べる技術ノート。
   actions:
-    - text: 全体像から読む
-      link: /ai-tech-notes/use-cases/reference-architectures/
+    - text: LLM の基礎から読む
+      link: /ai-tech-notes/llm-basics/
       icon: right-arrow
       variant: primary
     - text: GitHub で見る
@@ -19,10 +19,12 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## このサイトの目的
 
-**AI Tech Notes** は、社内ナレッジを対象とした **AI 回答 / ドラフト生成 / レビュー支援** システムを
-設計・構築するときに「知っておくべきこと」を、抜け漏れなく一箇所にまとめた技術ノートです。
-LLM の基礎から RAG・MCP・エージェント開発・データソース接続（Microsoft 系中心）・データ形式・
-アンチパターン・コスト/ROI までを横断的に扱い、**「何を選び、なぜそう作るか」を判断できる状態**になることを目指します。
+**AI Tech Notes** は、**若手エンジニアが LLM（大規模言語モデル）の基礎を学ぶ** ための技術ノートです。
+トークンやコンテキストウィンドウといった土台から始めて、RAG・MCP・エージェント開発へと順に進みます。
+題材には社内ナレッジ（Microsoft 系のデータ）を使った **AI 回答 / ドラフト作成 / レビュー支援** を取り上げ、
+最後にそれらを組み合わせたシステム構成（アーキテクチャ）を発展編として扱います。
+
+目指すのは、**「LLM がなぜそう振る舞うのか」を理解し、「何を選び、なぜそう作るか」を自分で説明できる状態** です。
 
 ## 章の一覧
 
@@ -52,31 +54,36 @@ LLM の基礎から RAG・MCP・エージェント開発・データソース接
     [読む →](/ai-tech-notes/data-modeling/)
   </Card>
   <Card title="アンチパターン" icon="warning">
-    データ複製による重複バージョン問題、MCP トークン浪費などの落とし穴。
+    データ・検索・MCP・セキュリティ・コスト・運用でよくある失敗と、その回避策の一覧。
     [読む →](/ai-tech-notes/anti-patterns/)
   </Card>
   <Card title="コスト・ROI" icon="approve-check">
     コスト構造と試算、最適化の順番、コスト視点のシステム選定、ROI の測り方。
     [読む →](/ai-tech-notes/cost-roi/)
   </Card>
-  <Card title="ユースケース" icon="rocket">
-    回答・ドラフト・レビューの代表的ユースケースと、システム全体像を含む推奨アーキテクチャ。
+  <Card title="ユースケース（発展）" icon="rocket">
+    回答・ドラフト・レビューの代表的ユースケースと、それに対応する推奨アーキテクチャ・M365 での構成例。
     [読む →](/ai-tech-notes/use-cases/)
   </Card>
 </CardGrid>
 
 ## 読み進め方
 
-1. まず [推奨アーキテクチャ](/ai-tech-notes/use-cases/reference-architectures/) の前半（全体像・設計判断）で、システム全体を俯瞰する
-2. 不安があれば [LLM の基礎](/ai-tech-notes/llm-basics/)（トークン・コンテキストウィンドウ・モデル選定）で土台を固める
-3. 各論（[RAG](/ai-tech-notes/rag/) / [MCP](/ai-tech-notes/mcp/) / [エージェント開発](/ai-tech-notes/agents/) / [データ](/ai-tech-notes/data-modeling/)）を深掘りする
-4. [アンチパターン](/ai-tech-notes/anti-patterns/) と [コスト・ROI](/ai-tech-notes/cost-roi/) で実装判断を固める
-5. 最後に [ユースケース](/ai-tech-notes/use-cases/) で自分のケースに近い構成を確認し、ここまでの知識を当てはめる
+サイドバーの上から順に読むと、基礎から発展へ無理なく進めるように並べています。
+
+1. **[LLM の基礎](/ai-tech-notes/llm-basics/)** — トークン・コンテキストウィンドウ・モデル選定・生成の制御。以降のすべての章の土台
+2. **[RAG](/ai-tech-notes/rag/) → [MCP](/ai-tech-notes/mcp/)** — LLM に社内の知識やツールを渡す 2 つの方法
+3. **[エージェント開発](/ai-tech-notes/agents/)** — エージェントに仕事を任せるための考え方と仕組み
+4. **[データソース](/ai-tech-notes/data-sources/) / [データ設計・形式](/ai-tech-notes/data-modeling/)** — AI に読ませるデータの集め方・整え方
+5. **[コスト・ROI](/ai-tech-notes/cost-roi/)** — 料金の仕組みと、コストを抑える工夫
+6. **[アンチパターン](/ai-tech-notes/anti-patterns/)** — ここまでの内容を「よくある失敗」から振り返る
+7. **[ユースケース（発展）](/ai-tech-notes/use-cases/)** — 学んだ要素を組み合わせ、ユースケースごとのシステム構成を確認する
 
 ## スコープ
 
-- **対象:** Microsoft 系を中心とした社内データ基盤（File Server / Confluence / JIRA / GitHub / SharePoint）
-- **対象:** 汎用 LLM（Claude / GPT / Gemini など）を API・クラウド経由で利用する構成
+- **想定読者:** LLM を使った開発に関わり始めた若手エンジニア（プログラミングの基本は分かる前提）
+- **扱う題材:** Microsoft 系を中心とした社内データ（File Server / Confluence / JIRA / GitHub / SharePoint）
+- **扱う題材:** 汎用 LLM（Claude / GPT / Gemini など）を API・クラウド経由で利用する構成
 - **対象外:** Google Workspace 系（Drive / Docs など）
 - **対象外:** モデルの事前学習・ファインチューニングの実装詳細、オンプレミス GPU 基盤の構築
 
@@ -84,6 +91,7 @@ LLM の基礎から RAG・MCP・エージェント開発・データソース接
 
 | 更新日 | 更新したページ | 内容 |
 | --- | --- | --- |
+| 2026-11-28 | トップ / [バージョン管理と重複対策](/ai-tech-notes/data-modeling/versioning/) / [M365 構成例](/ai-tech-notes/use-cases/m365-copilot-claude-reference/) | 若手向けの学習ノートとしてトップの説明と読み進め方を見直し。「重複バージョン問題」をバージョン管理に統合し、アンチパターンは索引 1 ページに整理。M365 の参考アーキテクチャをユースケース章へ移動 |
 | 2026-11-28 | トップ / [推奨アーキテクチャ](/ai-tech-notes/use-cases/reference-architectures/) | 「はじめに」をトップに統合し、「システム全体像」を推奨アーキテクチャに統合（全体像・設計判断とユースケース別構成を 1 ページに整理） |
 | 2026-11-28 | [ハーネス設計](/ai-tech-notes/agents/harness/) | ハーネスの構成要素、Anthropic の 3 つのパターン、長時間タスクのハーネス（初期化エージェント＋進捗ファイル）、Claude Code での対応表 |
 | 2026-11-28 | [Skills](/ai-tech-notes/agents/skills/) | 必要なときだけ読み込まれる手順書の仕組み、`SKILL.md` の書き方、呼び出し方の制御、`CLAUDE.md`・MCP との使い分け |
