@@ -85,7 +85,7 @@ Anthropic の指針では、多くのエージェント処理は **Opus 5.5 の�
 
 - **1 人あたりの月額 API コスト** と **席課金の単価** を比べる。ヘビーユーザーが多い業務は席課金、限られた部署の特定業務は従量課金が有利になりやすい
 - 両方を組み合わせる構成も一般的です（日常は既製のアシスタント、業務特化の処理は自前）。全体像は
-  [システム全体像 — 作るか・使うか](/ai-tech-notes/overview/architecture/#作るか使うかbuild-vs-buy) と
+  [推奨アーキテクチャ — 作るか・使うか](/ai-tech-notes/use-cases/reference-architectures/#作るか使うかbuild-vs-buy) と
   [参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/mcp/m365-copilot-claude-reference/) を参照してください
 - 自前構成の運用工数は見落とされがちです。[ROI の測り方](/ai-tech-notes/cost-roi/roi/) で人件費まで含めて比べます
 

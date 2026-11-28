@@ -36,8 +36,7 @@ npm run dev      # 開発サーバー起動 → http://localhost:4321/ai-tech-no
 ```
 src/content/docs/
 ├── index.mdx          # トップページ（splash）
-├── overview/          # はじめに（目的・全体像）
-├── use-cases/         # ユースケース（回答/ドラフト/レビュー + 推奨構成）
+├── use-cases/         # ユースケース（回答/ドラフト/レビュー + 全体像・推奨構成）
 ├── rag/               # RAG 設計（基礎/チャンク/検索/評価）
 ├── mcp/               # MCP 活用（概要/サーバ構成/トークン対策/使い分け）
 ├── data-sources/      # データソース（FileServer/Confluence/JIRA/GitHub/SharePoint）
