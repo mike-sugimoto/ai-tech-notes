@@ -48,7 +48,7 @@ flowchart TB
 | レイヤ | Microsoft 側の機能 | 本サイトの該当章 |
 | --- | --- | --- |
 | フロント | M365 Copilot / Teams にエージェントを公開 | [ユースケース](/ai-tech-notes/use-cases/) |
-| エージェント基盤 | Copilot Studio（オーケストレーション） | [システム全体像](/ai-tech-notes/overview/architecture/) |
+| エージェント基盤 | Copilot Studio（オーケストレーション） | [推奨アーキテクチャ](/ai-tech-notes/use-cases/reference-architectures/) |
 | モデル | 主モデルに **Anthropic Claude** を選択 | [モデルの特徴と選定](/ai-tech-notes/llm-basics/models/) |
 | 知識（RAG） | SharePoint 知識・Copilot コネクタ(Synced)・ファイル索引 | [RAG 設計](/ai-tech-notes/rag/) |
 | ツール（MCP） | Copilot Studio の MCP・Copilot コネクタ(Federated) | [MCP 活用](/ai-tech-notes/mcp/) |

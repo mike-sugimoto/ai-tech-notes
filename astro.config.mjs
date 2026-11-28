@@ -17,6 +17,8 @@ export default defineConfig({
   // 統合・移動したページの旧 URL を新しい場所へ転送する
   redirects: {
     '/anti-patterns/mcp-token-waste/': '/ai-tech-notes/mcp/token-cost/',
+    '/overview/about/': '/ai-tech-notes/',
+    '/overview/architecture/': '/ai-tech-notes/use-cases/reference-architectures/',
   },
   integrations: [
     starlight({
@@ -65,11 +67,7 @@ export default defineConfig({
       // 全文検索（Pagefind）は Starlight 標準で有効
       sidebar: [
         // トップページ（index.mdx）をメニュー先頭に統合
-        { label: 'トップ', link: '/' },
-        {
-          label: 'はじめに',
-          items: [{ autogenerate: { directory: 'overview' } }],
-        },
+        { label: 'はじめに', link: '/' },
         {
           label: 'LLM の基礎',
           items: [{ autogenerate: { directory: 'llm-basics' } }],

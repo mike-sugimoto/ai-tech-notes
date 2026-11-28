@@ -71,7 +71,7 @@ mindmap
 | アンチパターン | 何が起きるか | 回避策 |
 | --- | --- | --- |
 | 権限を後付け・無視した索引 | 見てはいけない文書が回答に混ざる | 検索段で権限フィルタ → [権限フィルタの実装](/ai-tech-notes/use-cases/knowledge-qa/#権限フィルタの実装) |
-| 取得した文書の指示に従う | 間接プロンプトインジェクションで誤操作・情報流出 | 取得内容はデータとして扱う → [システム全体像](/ai-tech-notes/overview/architecture/) |
+| 取得した文書の指示に従う | 間接プロンプトインジェクションで誤操作・情報流出 | 取得内容はデータとして扱う → [推奨アーキテクチャ](/ai-tech-notes/use-cases/reference-architectures/) |
 | エージェントに広い書き込み権限 | 誤操作の影響が大きくなる（過剰な権限） | 読み取りから始め、書き込みは承認付き → [MCP サーバ構成](/ai-tech-notes/mcp/server-design/) |
 | 共通アカウントで MCP 接続 | 閲覧権限の無い社員にも AI 経由で見える | 利用者本人として OAuth 認可 → [MCP サーバ構成](/ai-tech-notes/mcp/server-design/) |
 
