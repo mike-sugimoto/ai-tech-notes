@@ -98,7 +98,7 @@ flowchart TD
 | --- | --- | --- |
 | 関連文書がそもそも出てこない | チャンク・検索 | [チャンク戦略](/ai-tech-notes/rag/chunking/) / [ハイブリッド検索](/ai-tech-notes/rag/retrieval/) |
 | 取れているのに回答が薄い・的外れ | プロンプト・投入量 | コンテキスト構築・指示の見直し |
-| 古い情報で答える | データ鮮度 | [重複バージョン対策](/ai-tech-notes/anti-patterns/data-duplication/) |
+| 古い情報で答える | データ鮮度 | [重複バージョン対策](/ai-tech-notes/data-modeling/versioning/) |
 | 出典がズレる | チャンクのメタデータ | 見出しパス・doc_id の付与 |
 | コストが高い | 投入トークン量 | 絞り込み・[キャッシュ](/ai-tech-notes/rag/context-and-caching/) |
 

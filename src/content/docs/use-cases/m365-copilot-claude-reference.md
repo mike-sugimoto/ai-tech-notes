@@ -2,9 +2,9 @@
 title: 参考アーキテクチャ — M365 Copilot × Claude（RAG / MCP 接続）
 description: Microsoft 365 Copilot / Copilot Studio で Claude を使い、社内データに RAG と MCP で接続する具体的な構成例。
 sidebar:
-  label: 参考アーキテクチャ M365
-  order: 5
-lastUpdated: 2026-11-27
+  label: M365 構成例
+  order: 6
+lastUpdated: 2026-11-28
 ---
 
 **対象読者:** Microsoft 365 環境で **Claude** をエージェントの頭脳に使い、社内データへ
@@ -135,7 +135,7 @@ Microsoft の2つのコネクタモデルは、本サイトの使い分けにそ
 
 - [ ] **権限の継承**: SharePoint/Graph のアクセス権がそのまま回答の絞り込みに効いているか（[権限フィルタ](/ai-tech-notes/rag/retrieval/)）
 - [ ] **RAG/MCP の切り分け**: 静的は Synced、動的は MCP/Federated に振り分けたか
-- [ ] **重複・失効**: 同じ文書を複数経路で二重に索引していないか／削除が伝播するか（[重複対策](/ai-tech-notes/anti-patterns/data-duplication/)）
+- [ ] **重複・失効**: 同じ文書を複数経路で二重に索引していないか／削除が伝播するか（[重複対策](/ai-tech-notes/data-modeling/versioning/)）
 - [ ] **MCP のツール最小化**: 使うツールだけ ON にしてトークンを抑えたか（[トークン対策](/ai-tech-notes/mcp/token-cost/)）
 - [ ] **モデル選定**: ユースケースに対し Claude のモデル/設定が妥当か（[コスト・ROI](/ai-tech-notes/cost-roi/system-selection/)）
 - [ ] **ガバナンス**: Entra ID 認証・Purview/DLP・リージョン要件を満たしているか

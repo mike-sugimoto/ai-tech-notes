@@ -43,7 +43,7 @@ flowchart TB
 
 - **更新日を必ず表示** すると、利用者自身が古い情報に気付けます。
 - 出典リンクは **元システム（SharePoint / Confluence など）の URL** を指し、AI 用の複製を指さないようにします。
-  → [データ複製と重複バージョン問題](/ai-tech-notes/anti-patterns/data-duplication/)
+  → [バージョン管理と重複対策](/ai-tech-notes/data-modeling/versioning/)
 
 :::tip[API の引用機能を使う]
 Claude の API には、渡した文書や検索結果に対して **どの文がどの出典に基づくか** を構造化して返す
@@ -89,7 +89,7 @@ Claude の API には、渡した文書や検索結果に対して **どの文�
 
 - **チャンク設計** が回答精度を大きく左右する → [チャンク戦略](/ai-tech-notes/rag/chunking/)
 - **メタデータ**（部署・更新日・文書種別）で検索を絞る → [メタデータ](/ai-tech-notes/data-modeling/metadata/)
-- 古い版が混ざると精度低下 → [重複バージョン対策](/ai-tech-notes/anti-patterns/data-duplication/)
+- 古い版が混ざると精度低下 → [重複バージョン対策](/ai-tech-notes/data-modeling/versioning/)
 - 評価用の質問セットを作り、変更のたびに **正答率・出典の正確さ・回答不可の適切さ** を測る → [RAG の評価](/ai-tech-notes/rag/evaluation/)
 
 ## 参考・出典

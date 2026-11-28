@@ -48,7 +48,7 @@ flowchart LR
 :::tip[自前の索引を作らない選択肢も増えた]
 SharePoint 中心なら、Retrieval API を使うと **データを複製せず、権限も問い合わせ時に効く** 形で RAG を構成できます。
 自前の索引は「検索品質を作り込みたい」「M365 外のデータと統合したい」場合に絞ると、
-[データ複製の問題](/ai-tech-notes/anti-patterns/data-duplication/) と権限同期の負担を避けられます。
+[データ複製の問題](/ai-tech-notes/data-modeling/versioning/) と権限同期の負担を避けられます。
 :::
 
 :::caution[Atlassian Data Center の提供終了]
@@ -59,7 +59,7 @@ Atlassian は Jira / Confluence などの Data Center 製品について、**202
 ## 横断的に押さえる点
 
 - **権限の継承:** 元システムのアクセス権を回答にも反映する
-- **重複の排除:** 同じ文書が複数ソースに存在しうる → [重複対策](/ai-tech-notes/anti-patterns/data-duplication/)
+- **重複の排除:** 同じ文書が複数ソースに存在しうる → [重複対策](/ai-tech-notes/data-modeling/versioning/)
 - **正規化:** 取り込み後は [Markdown 等に正規化](/ai-tech-notes/data-modeling/) して扱う
 - **増分更新:** 変更分のみ再取り込みしてコストを抑える
 
@@ -155,7 +155,7 @@ ingest:
 
 - 各チャンクに `doc_id`（[メタデータ](/ai-tech-notes/data-modeling/metadata/)）を持たせておく
 - 除外ルールに該当・元が削除/更新 → その `doc_id` のチャンクを **DB から delete**（更新時は delete してから入れ直し）
-- これを定期ジョブで回すのが **失効同期**（[重複・バージョン対策](/ai-tech-notes/anti-patterns/data-duplication/)）
+- これを定期ジョブで回すのが **失効同期**（[同期ジョブと失効ルール](/ai-tech-notes/data-modeling/versioning/#同期ジョブと失効ルール)）
 
 ### 用語の対応表（曖昧な表現 → 具体的な処理）
 

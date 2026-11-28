@@ -1,7 +1,7 @@
 # AI Tech Notes
 
-AIによるナレッジ回答・ドラフト作成・レビューシステムを、高精度かつ低コストで構築するための
-包括的な設計ノート（RAG / MCP / データ設計 / コスト・ROI）。
+若手エンジニアが LLM の基礎から RAG・MCP・エージェント開発までを順に学び、
+社内ナレッジ AI（回答・ドラフト作成・レビュー支援）の構成を理解するための技術ノート。
 [Astro](https://astro.build/) + [Starlight](https://starlight.astro.build/) で構築し、
 GitHub Pages で公開します。
 
@@ -36,12 +36,14 @@ npm run dev      # 開発サーバー起動 → http://localhost:4321/ai-tech-no
 ```
 src/content/docs/
 ├── index.mdx          # トップページ（splash）
-├── use-cases/         # ユースケース（回答/ドラフト/レビュー + 全体像・推奨構成）
+├── llm-basics/        # LLM の基礎（トークン/コンテキストウィンドウ/モデル選定/生成の制御）
 ├── rag/               # RAG 設計（基礎/チャンク/検索/評価）
 ├── mcp/               # MCP 活用（概要/サーバ構成/トークン対策/使い分け）
+├── agents/            # エージェント開発（SDD/ループ/ハーネス/Skills/サブエージェント）
+├── use-cases/         # ユースケース・発展（回答/ドラフト/レビュー + 推奨アーキテクチャ/M365 構成例）
 ├── data-sources/      # データソース（FileServer/Confluence/JIRA/GitHub/SharePoint）
 ├── data-modeling/     # データ設計・形式（MD推奨/メタデータ/YAMLタグ/バージョン管理）
-├── anti-patterns/     # アンチパターン（重複版/MCPトークン浪費）
+├── anti-patterns/     # アンチパターン一覧（各章の失敗例の索引）
 └── cost-roi/          # コスト・ROI（構造/選定/最適化）
 ```
 

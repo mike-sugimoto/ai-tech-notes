@@ -94,7 +94,7 @@ flowchart LR
 
 :::tip[具体的な構成例]
 Microsoft 365 環境で Claude を使い、RAG と MCP を接続する具体的な事例は
-[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/mcp/m365-copilot-claude-reference/) を参照してください。
+[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/use-cases/m365-copilot-claude-reference/) を参照してください。
 :::
 
 ## 参考・出典

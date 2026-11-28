@@ -82,7 +82,7 @@ Microsoft 365 Copilot のコネクタも、この使い分けに対応した 2 �
 - **Synced コネクタ:** 外部データを事前に索引化（＝ RAG）
 - **Federated コネクタ:** MCP で実行時に取得し、索引化しない（＝ MCP）
 
-→ 具体的な構成は [参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/mcp/m365-copilot-claude-reference/) を参照。
+→ 具体的な構成は [参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/use-cases/m365-copilot-claude-reference/) を参照。
 
 ## 参考・出典
 

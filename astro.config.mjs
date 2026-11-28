@@ -19,6 +19,8 @@ export default defineConfig({
     '/anti-patterns/mcp-token-waste/': '/ai-tech-notes/mcp/token-cost/',
     '/overview/about/': '/ai-tech-notes/',
     '/overview/architecture/': '/ai-tech-notes/use-cases/reference-architectures/',
+    '/mcp/m365-copilot-claude-reference/': '/ai-tech-notes/use-cases/m365-copilot-claude-reference/',
+    '/anti-patterns/data-duplication/': '/ai-tech-notes/data-modeling/versioning/',
   },
   integrations: [
     starlight({
@@ -26,7 +28,7 @@ export default defineConfig({
       // サイトロゴ（ヘッダーのタイトル横）とファビコン
       logo: { src: './src/assets/logo.svg', alt: 'AI Tech Notes' },
       favicon: '/favicon.svg',
-      description: '高精度なAIナレッジ・システム構築のための設計ノート（RAG / MCP / データ設計 / コスト）',
+      description: '若手エンジニアが LLM の基礎から RAG・MCP・エージェント開発まで順に学ぶための技術ノート',
       // 単一言語（日本語）サイト。root ロケールを1つだけ定義すると言語切替UIは出ない。
       defaultLocale: 'root',
       locales: {
@@ -92,17 +94,15 @@ export default defineConfig({
           label: 'データ設計・形式',
           items: [{ autogenerate: { directory: 'data-modeling' } }],
         },
-        {
-          label: 'アンチパターン',
-          items: [{ autogenerate: { directory: 'anti-patterns' } }],
-        },
+        // アンチパターンは各章の失敗例をまとめた索引 1 ページだけなので、グループにせず直接リンクする
+        { label: 'アンチパターン', link: '/anti-patterns/' },
         {
           label: 'コスト・ROI',
           items: [{ autogenerate: { directory: 'cost-roi' } }],
         },
         // 各論を読んだ後に具体例として読むため、ユースケースは最後に置く
         {
-          label: 'ユースケース',
+          label: 'ユースケース（発展）',
           items: [{ autogenerate: { directory: 'use-cases' } }],
         },
       ],

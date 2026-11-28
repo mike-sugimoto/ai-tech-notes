@@ -71,6 +71,8 @@ flowchart TB
 
 各ユースケースに対する推奨構成は
 [推奨アーキテクチャ](/ai-tech-notes/use-cases/reference-architectures/) にまとめます。
+Microsoft 365 の製品機能に当てはめた具体例は
+[参考アーキテクチャ — M365 Copilot × Claude](/ai-tech-notes/use-cases/m365-copilot-claude-reference/) を参照してください。
 
 ## 参考・出典
 

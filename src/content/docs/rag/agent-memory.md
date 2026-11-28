@@ -111,7 +111,7 @@ flowchart LR
 
 :::caution[メモリに原本をコピーしない]
 規程や仕様書の本文をメモリにコピーすると、原本とメモリの **二重管理** になり、
-原本が改訂されても古い内容が残ります（→ [重複バージョン問題](/ai-tech-notes/anti-patterns/data-duplication/)）。
+原本が改訂されても古い内容が残ります（→ [重複バージョン問題](/ai-tech-notes/data-modeling/versioning/)）。
 メモリには **「どの原本を見るべきか」「何に注意すべきか」** を書き、本文は RAG で引きます。
 :::
 
